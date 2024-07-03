@@ -39,6 +39,7 @@
 
                 <Button Text="начать игру"
                     FontSize="44"
+                    Clicked="OnStartGameButtonClicked"
                     FontFamily="Maki-Sans"
                         HeightRequest="135"
                         WidthRequest="415"
