@@ -1,4 +1,6 @@
-﻿namespace GallowsGame
+﻿using GallowsGame.Pages;
+
+namespace GallowsGame
 {
     public partial class MainPage : ContentPage
     {
@@ -18,8 +20,9 @@
 
         }
 
-        private void OnGameRulesButtonClicked(object sender, EventArgs e)
+        private async void OnGameRulesButtonClicked(object sender, EventArgs e)
         {
+            await Navigation.PushAsync(new GameRulesPage());
         }
     }
 }
