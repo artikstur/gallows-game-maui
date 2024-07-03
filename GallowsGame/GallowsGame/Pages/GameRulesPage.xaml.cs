@@ -12,5 +12,11 @@ namespace GallowsGame.Pages
         {
             InitializeComponent();
         }
+
+
+        public void OnBackToMainPageBttnClicked(object sender, EventArgs e)
+        {
+            Navigation.PushAsync(new MainPage());
+        }
     }
 }
