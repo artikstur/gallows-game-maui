@@ -12,6 +12,7 @@
         {
             Environment.Exit(0);
             Console.WriteLine("gwegwg");
+            Console.WriteLine("fwss");
         }
 
         private void OnStartGameButtonClicked(object sender, EventArgs e)
