@@ -24,10 +24,18 @@ namespace GallowsGame.Utils
                     {
                         new Label
                         {
+                            HeightRequest = 20,
+                            WidthRequest = 20,
+                            BackgroundColor = Colors.Yellow,
                             Text = symbol.ToString(),
                             HorizontalOptions = LayoutOptions.Center,
                             VerticalOptions = LayoutOptions.Center
                         },
+
+                        new Image()
+                        {
+                            Source = "letter-button.png"
+                        }
                     }
                 };
 

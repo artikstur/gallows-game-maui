@@ -17,7 +17,7 @@ namespace GallowsGame
 
         private void OnStartGameButtonClicked(object sender, EventArgs e)
         {
-
+            Navigation.PushAsync(new EnterWordPage());
         }
 
         private async void OnGameRulesButtonClicked(object sender, EventArgs e)

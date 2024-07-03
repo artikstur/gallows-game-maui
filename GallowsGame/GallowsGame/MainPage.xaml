@@ -20,7 +20,7 @@
                FontFamily="Maki-Sans"
                TextColor="Red"/>
         </StackLayout>
-
+            
         <StackLayout Grid.Row="1"
                  VerticalOptions="Center"
                  HorizontalOptions="CenterAndExpand"
@@ -48,7 +48,7 @@
                      TextColor="Navy"/>
             </Grid>
 
-
+            
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="135"/>
@@ -92,7 +92,7 @@
                    HorizontalOptions="Center"
                    VerticalOptions="Center"
                    FontFamily="Maki-Sans"
-                   TextColor="Navy"/>
+                   TextColor="Navy"/> 
             </Grid>
         </StackLayout>
         </Grid>
