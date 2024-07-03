@@ -10,8 +10,7 @@
 
         private void OnCounterClicked(object sender, EventArgs e)
         {
-
+            Console.WriteLine("fvfvf");
         }
     }
-
 }
