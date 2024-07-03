@@ -13,7 +13,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-            
+
         <StackLayout
              VerticalOptions="Start"
              HorizontalOptions="Center"
@@ -24,9 +24,9 @@
                 VerticalOptions="Start"
                 FontFamily="Maki-Sans"
                 TextColor="Red"/>
-            
+
         </StackLayout>
-            
+
         <StackLayout Grid.Row="1"
                      VerticalOptions="Center"
                      HorizontalOptions="Center"
@@ -45,16 +45,17 @@
 
                 <Button Text="начать игру"
                     FontSize="44"
+                    Clicked="OnStartGameButtonClicked"
                     FontFamily="Maki-Sans"
-                        HeightRequest="135"
-                        WidthRequest="415"
-                        BackgroundColor="Transparent"
-                     HorizontalOptions="CenterAndExpand"
-                     VerticalOptions="CenterAndExpand"
-                     TextColor="Navy"/>
+                    HeightRequest="135"
+                    WidthRequest="415"
+                    BackgroundColor="Transparent"
+                    HorizontalOptions="CenterAndExpand"
+                    VerticalOptions="CenterAndExpand"
+                    TextColor="Navy"/>
             </Grid>
 
-            
+
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="135"/>
@@ -68,9 +69,9 @@
                 />
                 <Button Text="правила игры"
                      FontSize="44"
-                      HeightRequest="135"
-                      WidthRequest="415"
-                      BackgroundColor="Transparent"
+                     HeightRequest="135"
+                     WidthRequest="415"
+                     BackgroundColor="Transparent"
                      HorizontalOptions="Center"
                      VerticalOptions="Center"
                      FontFamily="Maki-Sans"
@@ -97,7 +98,7 @@
                    HorizontalOptions="Center"
                    VerticalOptions="Center"
                    FontFamily="Maki-Sans"
-                   TextColor="Navy"/> 
+                   TextColor="Navy"/>
             </Grid>
         </StackLayout>
     </Grid>
