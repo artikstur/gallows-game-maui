@@ -5,11 +5,21 @@ namespace GallowsGame.Pages;
 
 public partial class EnterWordPage : ContentPage
 {
+    Label userTextLabel = new Label()
+    {
+        Text = "",
+        FontSize = 36,
+        VerticalOptions = LayoutOptions.Center,
+        HorizontalOptions = LayoutOptions.Center
+    };
+    public string userText { get; set; }
+
+
     public EnterWordPage()
     {
         InitializeComponent();
 
-        var keyboard = KeyboardBuilder.CreateKeyboard();
+        var keyboard = KeyboardBuilder.CreateKeyboard(this);
 
         var keyboardLayout = new FlexLayout()
         {
@@ -92,6 +102,7 @@ public partial class EnterWordPage : ContentPage
             HorizontalOptions = LayoutOptions.Center,
         };
 
+
         var enterWordImage = new Image()
         {
             WidthRequest = 450,
@@ -99,18 +110,50 @@ public partial class EnterWordPage : ContentPage
             Source = "inroductory_line.png",
         };
 
-      
+        var checkWordImage = new Image()
+        {
+            WidthRequest = 70,
+            HeightRequest = 70,
+            Source = "confirm_bttn.png",
+            HorizontalOptions = LayoutOptions.End,
+            Margin = new Thickness(0, 0, 400, 0)
+        };
+
+        Button innerBtn = new Button()
+        {
+            WidthRequest = 70,
+            HeightRequest = 70,
+            BackgroundColor = Colors.Transparent,
+            HorizontalOptions = LayoutOptions.End,
+            Margin = new Thickness(0, 0, 400, 0)
+        };
+
+        innerBtn.Clicked += OnSubmitButtonClicked;
+
+        var checkWordBox = new Grid()
+        {
+            Children =
+            {
+                checkWordImage,
+                innerBtn
+            }
+        };
+
+        var enterWordBox = new Grid()
+        {
+            Children = { enterWordImage, userTextLabel, checkWordBox }
+        };
 
         StackLayout grid = new StackLayout
         {
-            Children = { topStack, enterWordStack, enterWordImage, keyboardBox },
+            Children = { topStack, enterWordStack, enterWordBox, keyboardBox },
             VerticalOptions = LayoutOptions.FillAndExpand,
             HorizontalOptions = LayoutOptions.FillAndExpand,
         };
 
         FlexLayout.SetBasis(grid, new FlexBasis(1f, true));
 
-       
+
         var backgroundImage = new Image
         {
             Source = "background.png",
@@ -124,8 +167,40 @@ public partial class EnterWordPage : ContentPage
             Children =
             {
                 backgroundImage,
-                grid 
+                grid
             }
         };
+    }
+    public void OnKeyboardButtonClicked(object sender, EventArgs e)
+    {
+        Button button = (Button)sender;
+        button.BackgroundColor = Colors.Aqua;
+        if (userTextLabel.Text.Length < 8)
+        {
+            userTextLabel.Text += button.Text;
+            userText = userTextLabel.Text;
+        }
+    }
+
+    public void OnClearButtonClicked(object sender, EventArgs e)
+    {
+        Button button = (Button)sender;
+        button.BackgroundColor = Colors.Aqua;
+        if (userTextLabel.Text.Length > 0)
+        {
+            userTextLabel.Text = userTextLabel.Text.Remove(userTextLabel.Text.Length - 1);
+            userText = userTextLabel.Text;
+        }
+    }
+
+    public void OnSubmitButtonClicked(object sender, EventArgs e)
+    {
+        Button button = (Button)sender;
+        button.BackgroundColor = Colors.Aqua;
+
+        if (!(userTextLabel.Text.Length > 2 && userTextLabel.Text.Length < 9))
+        {
+            return;
+        }
     }
 }

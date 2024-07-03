@@ -45,7 +45,7 @@
                         WidthRequest="415"
                         BackgroundColor="Transparent"
                      HorizontalOptions="CenterAndExpand"
-                        Clicked="OnStartGameButtonClicked"
+                       
                      VerticalOptions="CenterAndExpand"
                      TextColor="Navy"/>
             </Grid>
