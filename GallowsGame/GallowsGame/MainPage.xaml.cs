@@ -21,8 +21,7 @@
 
         private void OnGameRulesButtonClicked(object sender, EventArgs e)
         {
-
+            Console.WriteLine("fvfvf");
         }
     }
-
 }
