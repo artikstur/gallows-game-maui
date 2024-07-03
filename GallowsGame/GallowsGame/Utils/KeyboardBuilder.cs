@@ -10,38 +10,75 @@ namespace GallowsGame.Utils
     {
         public static List<char> Symbols { get; private set; } = new List<char>
         {
-            'а', 'б', 'в', 'г', 'д', 'е', 'ё', 'ж', 'з', 'и', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ъ', 'ы', 'ь', 'э', 'ю', 'я'
+            ' ', 'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ё', ' ', 'Ж', 'З', 'И', 'Й', 'К', 'Л', 'М', 'Н', 'О', 'П', 'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ъ', 'Ы', 'Ь', 'Э', 'Ю', 'Я'
         };
+
 
         public static CustomKeyboard CreateKeyboard()
         {
             CustomKeyboard keyboard = new CustomKeyboard();
             foreach (var symbol in Symbols)
             {
-                var button = new Grid
-                { 
-                    Children =
-                    {
-                        new Label
+                if (symbol == ' ') 
+                {
+                    var button = new Grid
+                    { 
+                        Children =
                         {
-                            HeightRequest = 20,
-                            WidthRequest = 20,
-                            BackgroundColor = Colors.Yellow,
-                            Text = symbol.ToString(),
-                            HorizontalOptions = LayoutOptions.Center,
-                            VerticalOptions = LayoutOptions.Center
+                            new Button
+                            {
+                                FontSize = 30,
+                                HeightRequest = 58,
+                                WidthRequest = 58,
+                                BackgroundColor = Colors.Transparent,
+                                Text = symbol.ToString(),
+                                TextColor = Colors.Black,
+                                HorizontalOptions = LayoutOptions.Center,
+                                VerticalOptions = LayoutOptions.Center,
+                            },
+
+                            new Image()
+                            {
+                                 HeightRequest = 68,
+                                 WidthRequest = 68,
+                                 Source = "letter_button.png",
+                                 Margin = 4,
+                            }
                         },
-
-                        new Image()
+                        Opacity = 0,
+                    };
+                    keyboard.Buttons.Add(button);
+                }
+                else
+                {
+                    var button = new Grid
+                    {
+                        Children =
                         {
-                            Source = "letter-button.png"
+                            new Button
+                            {
+                                FontSize = 30,
+                                HeightRequest = 58,
+                                WidthRequest = 58,
+                                BackgroundColor = Colors.Transparent,
+                                Text = symbol.ToString(),
+                                TextColor = Colors.Black,
+                                HorizontalOptions = LayoutOptions.Center,
+                                VerticalOptions = LayoutOptions.Center,
+                            },
+
+                            new Image()
+                            {
+                                 HeightRequest = 68,
+                                 WidthRequest = 68,
+                                 Source = "letter_button.png",
+                                 Margin = 4,
+                            }
                         }
-                    }
-                };
-
-                keyboard.Buttons.Add(button);
+                    };
+                    keyboard.Buttons.Add(button);
+                }
             }
-
             return keyboard;
         }
     }
