@@ -8,9 +8,9 @@ namespace GallowsGame.Pages
 {
     public partial class GameRulesPage : ContentPage
     {
-
         public GameRulesPage()
         {
+            InitializeComponent();
         }
     }
 }

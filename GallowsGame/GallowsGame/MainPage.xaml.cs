@@ -20,9 +20,9 @@ namespace GallowsGame
             Navigation.PushAsync(new EnterWordPage());
         }
 
-        private void OnGameRulesButtonClicked(object sender, EventArgs e)
+        private async void OnGameRulesButtonClicked(object sender, EventArgs e)
         {
-
+            await Navigation.PushAsync(new GameRulesPage());
         }
     }
 }
