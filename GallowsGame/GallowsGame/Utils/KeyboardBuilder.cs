@@ -18,10 +18,23 @@ namespace GallowsGame.Utils
             CustomKeyboard keyboard = new CustomKeyboard();
             foreach (var symbol in Symbols)
             {
-                Grid keyboardButton = new Grid();
+                var button = new Grid
+                { 
+                    Children =
+                    {
+                        new Label
+                        {
+                            Text = symbol.ToString(),
+                            HorizontalOptions = LayoutOptions.Center,
+                            VerticalOptions = LayoutOptions.Center
+                        },
+                    }
+                };
+
+                keyboard.Buttons.Add(button);
             }
 
-            throw new NotImplementedException();
+            return keyboard;
         }
     }
 }
