@@ -23,8 +23,8 @@
                 HorizontalOptions="Center"
                 VerticalOptions="Start"
                 FontFamily="Maki-Sans"
-                TextColor="Red"
-             />
+                TextColor="Red"/>
+            
         </StackLayout>
             
         <StackLayout Grid.Row="1"
@@ -92,6 +92,7 @@
                    FontSize="44"
                    HeightRequest="90"
                    WidthRequest="280"
+                   Clicked="OnExitButtonClicked"
                    BackgroundColor="Transparent"
                    HorizontalOptions="Center"
                    VerticalOptions="Center"
