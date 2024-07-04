@@ -4,120 +4,154 @@ namespace GallowsGame.Pages;
 
 public partial class GamePage : ContentPage
 {
-    private string userText;  
-
-    private int coinCount = 3; //3 по дефолту
-
-    private string guessWord;
-
+    private int coinCount = 3;
+    private string hiddenWord;
+    private string currentOpenedWord; //отгаданное на данный момент слово
     public GamePage(string userText)
-	{
-		InitializeComponent();
-		this.userText = userText;
+    {
+        this.currentOpenedWord = new string('_', userText.Length);
+        this.hiddenWord = userText;
 
-        var gallowImage = new Image()
-        {
-            WidthRequest = 450,
-            HeightRequest = 800,
-            Source = "gallow_concept.png",
-            HorizontalOptions = LayoutOptions.Center,
-            VerticalOptions = LayoutOptions.Center,
-            Margin = new Thickness(0, -100, 0,0)
-        };
+        InitializeComponent();
+        CreateLayout();
+    }
 
-        Label titleLabel = new Label()
-        {
-            Text = "Слово:",
-            TextColor = Colors.Navy,
-            FontSize = 40,
-            FontFamily = "Maki-Sans",
-            VerticalOptions = LayoutOptions.CenterAndExpand,
-            HorizontalOptions = LayoutOptions.Center
-        };
-
-        Label guessLabel = new Label()
-        {
-            Text = guessWord,
-            TextColor = Colors.Red,
-            FontSize = 55,
-            FontFamily = "Maki-Sans",
-            VerticalOptions = LayoutOptions.CenterAndExpand,
-            HorizontalOptions = LayoutOptions.CenterAndExpand,
-        };
-
-        var pauseImageBttn = new ImageButton()
-        {
-            HeightRequest = 80,
-            WidthRequest = 80,
-            Source = "pausebttn.png",
-            VerticalOptions = LayoutOptions.Start,
-            HorizontalOptions = LayoutOptions.End,
-            Margin = new Thickness(0, -60, 15, 0),
-            BackgroundColor = Colors.Transparent,
-        };
-
-        Label coinCountText = new Label()
-        {
-            Text = coinCount.ToString(),
-            TextColor = Colors.Black,
-            FontSize = 40,
-            FontFamily = "Maki-Sans",
-            VerticalOptions = LayoutOptions.Start,
-            HorizontalOptions = LayoutOptions.Start
-        };
-
+    public FlexLayout CreateTopBarLayout()
+    {
         var coinImage = new Image()
         {
+            Margin = new Thickness(10, 11, 5, 10),
+            Source = "coin.png",
             HeightRequest = 50,
             WidthRequest = 50,
-            Source = "coin.png",
-            VerticalOptions = LayoutOptions.Start,
-            HorizontalOptions = LayoutOptions.Start,
-            Margin = new Thickness(0, 0, -0, 0),
         };
 
-        pauseImageBttn.Clicked += OnPauseButtonClicked;
-
-        var TopBar = new StackLayout()
+        var balanceLabel = new Label()
         {
-            Children = {titleLabel,pauseImageBttn, coinImage, coinCountText, guessLabel},
-            BackgroundColor = Colors.Pink,
+            Text = coinCount.ToString(),
+            FontSize = 50,
+        };
+
+        var coinBox = new FlexLayout()
+        {
+            Children = { coinImage, balanceLabel },
+        };
+
+        var currentWordClue = new Label()
+        {
+            Margin = new Thickness(0, 11, 0, 0),
+            HorizontalOptions = LayoutOptions.Center,
+            Text = "Слово:",
+            FontSize = 40,
+        };
+
+        var currentWord = new Label()
+        {
+            HorizontalOptions = LayoutOptions.Center,
+            Text = this.currentOpenedWord,
+            FontSize = 50,
+        };
+
+        var leftBarCenterBox = new VerticalStackLayout()
+        {
+            Children = { currentWordClue, currentWord }
+        };
+
+        var pauseBtn = new ImageButton()
+        {
+            HorizontalOptions = LayoutOptions.End,
+            BackgroundColor = Colors.Transparent,
+            Margin = new Thickness(0, 4, 10, 0),
+            Source = "pausebttn.png",
+            HeightRequest = 80,
+            WidthRequest = 80,
+        };
+        pauseBtn.Clicked += OnPauseButtonClicked;
+
+        FlexLayout.SetBasis(coinBox, new FlexBasis(0.33f, true));
+        FlexLayout.SetBasis(leftBarCenterBox, new FlexBasis(0.33f, true));
+        FlexLayout.SetBasis(pauseBtn, new FlexBasis(0.33f, true));
+
+        var topBar = new FlexLayout()
+        {
+            Children = { coinBox, leftBarCenterBox, pauseBtn },
+            JustifyContent = FlexJustify.SpaceBetween,
+            Direction = FlexDirection.Row,
             HeightRequest = 150,
-			HorizontalOptions = LayoutOptions.FillAndExpand,
-        };
-
-		var LeftCenterBox = new StackLayout()
-		{
-            BackgroundColor = Colors.Beige,
-            Children = { gallowImage},
-            VerticalOptions = LayoutOptions.FillAndExpand,
             HorizontalOptions = LayoutOptions.FillAndExpand,
         };
 
-        var RightCenterBox = new StackLayout()
+        return topBar;
+    }
+
+    public Image CreateGallowsImageLayout()
+    {
+        var gallowsImage = new Image()
         {
-            BackgroundColor = Colors.DarkBlue,
+            Margin = 50,
+            Source = "gallow_concept.png",
+        };
+
+        return gallowsImage;
+    }
+
+    public FlexLayout CreateCenterLayout()
+    {
+        var gallowsImage = CreateGallowsImageLayout();
+        FlexLayout.SetBasis(gallowsImage, new FlexBasis(1f, true));
+
+        var leftCenterBox = new Grid()
+        {
+            Children = { gallowsImage },
+        };
+
+        var rightCenterBox = new StackLayout()
+        {
+            BackgroundColor = Colors.Aqua,
             VerticalOptions = LayoutOptions.FillAndExpand,
             HorizontalOptions = LayoutOptions.FillAndExpand,
         };
 
-        var CenterBox = new FlexLayout()
+        var centerBox = new FlexLayout()
         {
             Margin = new Thickness(30, 0),
-            Children = {LeftCenterBox, RightCenterBox },
+            Children = { leftCenterBox, rightCenterBox },
             VerticalOptions = LayoutOptions.FillAndExpand,
             HorizontalOptions = LayoutOptions.FillAndExpand,
         };
 
-        FlexLayout.SetBasis(LeftCenterBox, new FlexBasis(0.5f, true));
-        FlexLayout.SetBasis(RightCenterBox, new FlexBasis(0.5f, true));
+        FlexLayout.SetBasis(leftCenterBox, new FlexBasis(0.5f, true));
+        FlexLayout.SetBasis(rightCenterBox, new FlexBasis(0.5f, true));
 
-        Content = new StackLayout()
-		{
-			BackgroundColor = Colors.Aqua,
-			Children = { TopBar, CenterBox }
-		};
-	}
+        return centerBox;
+    }
+    public void CreateLayout()
+    {
+        var topBar = CreateTopBarLayout();
+        var centerBox = CreateCenterLayout();
+
+        var backgroundImage = new Image
+        {
+            Source = "background.png",
+            Aspect = Aspect.AspectFill,
+        };
+
+        var MainContent = new StackLayout()
+        {
+            Children = { topBar, centerBox }
+        };
+
+        Content = new Grid
+        {
+            VerticalOptions = LayoutOptions.FillAndExpand,
+            HorizontalOptions = LayoutOptions.FillAndExpand,
+            Children =
+            {
+                backgroundImage,
+                MainContent,
+            }
+        };
+    }
     public void OnPauseButtonClicked(object sender, EventArgs e)
     {
         Navigation.PushAsync(new MenuPage());

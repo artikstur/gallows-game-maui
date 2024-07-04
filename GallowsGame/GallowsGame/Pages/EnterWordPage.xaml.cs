@@ -16,7 +16,7 @@ public partial class EnterWordPage : ContentPage
         VerticalOptions = LayoutOptions.Center,
         HorizontalOptions = LayoutOptions.Center
     };
-    private string userText;
+    private string userText  = "";
 
     public EnterWordPage()
     {
@@ -239,16 +239,18 @@ public partial class EnterWordPage : ContentPage
         Button button = (Button)sender;
         button.BackgroundColor = Colors.Aqua;
 
-        //if (!(userTextLabel.Text.Length > 2 && userTextLabel.Text.Length < 9))
-        //{
-        //    return;
-        //}
+        if (!(userTextLabel.Text.Length > 2 && userTextLabel.Text.Length < 9))
+        {
+            DisplayAlert("Ошибка", "Минимум 3 символа и максимум 8", "ОK");
+            return; 
+        }
 
-        Navigation.PushAsync(new GamePage(userText));
+        Navigation.PushAsync(new GamePage(userTextLabel.Text));
     }
 
     public void OnPauseButtonClicked(object sender, EventArgs e)
     {
         Navigation.PushAsync(new MenuPage());
     }
+
 }
