@@ -12,12 +12,12 @@ namespace GallowsGame.Utils
     {
         public static List<char> Symbols { get; private set; } = new List<char>
         {
-            ' ', 'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ё', ' ', 'Ж', 'З', 'И', 'Й', 'К', 'Л', 'М', 'Н', 'О', 'П', 'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ъ', 'Ы', 'Ь', 'Э', 'Ю', 'Я'
+            'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ё', 'Ж', 'З', 'И', 'Й', 'К', 'Л', 'М', 'Н', 'О', 'П', 'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ъ', 'Ы', 'Ь', 'Э', 'Ю', 'Я'
         };
 
         private static HashSet<char> vowels = new HashSet<char> { 'А', 'Е', 'Ё', 'И', 'О', 'У', 'Ы', 'Э', 'Ю', 'Я' };
-        public static EnterWordPage CurrentPage { get; private set; }
-        public static CustomKeyboard CreateKeyboard(EnterWordPage page)
+        public static ContentPage CurrentPage { get; private set; }
+        public static CustomKeyboard CreateKeyboard(ContentPage page, Action<object, EventArgs> onKeyboardButtonClicked, Action<object, EventArgs> onClearButtonClicked, bool isClearBtnRequred)
         {
             CustomKeyboard keyboard = new CustomKeyboard();
             CurrentPage = page;
@@ -71,7 +71,8 @@ namespace GallowsGame.Utils
                         VerticalOptions = LayoutOptions.Center,
                     };
 
-                    innerBtn.Clicked += page.OnKeyboardButtonClicked;
+                    innerBtn.Clicked += new EventHandler(onKeyboardButtonClicked);
+
                     var button = new Grid
                     {
                         Children =
@@ -91,13 +92,16 @@ namespace GallowsGame.Utils
                 }
             }
 
-            keyboard.Buttons.Add(CreateBackSpaceBtn());
+            if (isClearBtnRequred)
+            {
+                keyboard.Buttons.Add(CreateBackSpaceBtn(onClearButtonClicked));
+            }
 
             return keyboard;
         }
 
 
-        private static Grid CreateBackSpaceBtn()
+        private static Grid CreateBackSpaceBtn(Action<object, EventArgs> onClearButtonClicked)
         {
             var backspaceInnerButton = new Button
             {
@@ -111,7 +115,7 @@ namespace GallowsGame.Utils
                 VerticalOptions = LayoutOptions.Center,
             };
 
-            backspaceInnerButton.Clicked += CurrentPage.OnClearButtonClicked;
+            backspaceInnerButton.Clicked += new EventHandler(onClearButtonClicked);
 
             var backspaceButton = new Grid
             {

@@ -60,7 +60,7 @@ public partial class EnterWordPage : ContentPage
 
     private StackLayout CreateKeyBoardLayout(int boxSize)
     {
-        var keyboard = KeyboardBuilder.CreateKeyboard(this);
+        var keyboard = KeyboardBuilder.CreateKeyboard(this, OnKeyboardButtonClicked, OnClearButtonClicked, true);
 
         var keyboardLayout = new FlexLayout()
         {
