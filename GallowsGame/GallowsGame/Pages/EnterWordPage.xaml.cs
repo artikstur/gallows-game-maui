@@ -7,7 +7,7 @@ namespace GallowsGame.Pages;
 
 public partial class EnterWordPage : ContentPage
 {
-    Label userTextLabel = new Label()
+    private Label userTextLabel = new Label()
     {
         Text = "",
         FontSize = 34,
@@ -21,21 +21,56 @@ public partial class EnterWordPage : ContentPage
     public EnterWordPage()
     {
         InitializeComponent();
+        CreateLayout();
+    }
 
+    public void CreateLayout()
+    {
+        var topBox = CreateTopLayout();
+        var clueBox = CreateClueLayout();
+        var enterWordBox = CreateEnterWordLayout();
+        var keyboardBox = CreateKeyBoardLayout(700);
+
+        StackLayout grid = new StackLayout
+        {
+            Children = { topBox, clueBox, enterWordBox, keyboardBox },
+            VerticalOptions = LayoutOptions.FillAndExpand,
+            HorizontalOptions = LayoutOptions.FillAndExpand,
+        };
+
+        FlexLayout.SetBasis(grid, new FlexBasis(1f, true));
+
+        var backgroundImage = new Image
+        {
+            Source = "background.png",
+            Aspect = Aspect.AspectFill,
+        };
+
+        Content = new Grid
+        {
+            VerticalOptions = LayoutOptions.FillAndExpand,
+            HorizontalOptions = LayoutOptions.FillAndExpand,
+            Children =
+            {
+                backgroundImage,
+                grid
+            }
+        };
+    }
+
+    private StackLayout CreateKeyBoardLayout(int boxSize)
+    {
         var keyboard = KeyboardBuilder.CreateKeyboard(this);
 
         var keyboardLayout = new FlexLayout()
         {
-
-            WidthRequest = 700,
+            WidthRequest = boxSize,
             JustifyContent = FlexJustify.Center,
-            //VerticalOptions = LayoutOptions.CenterAndExpand,
             HorizontalOptions = LayoutOptions.Center
         };
 
         var keyboardBox = new StackLayout()
         {
-
             Children = { keyboardLayout },
             HorizontalOptions = LayoutOptions.FillAndExpand,
             VerticalOptions = LayoutOptions.FillAndExpand,
@@ -48,6 +83,11 @@ public partial class EnterWordPage : ContentPage
 
         keyboardLayout.Wrap = FlexWrap.Wrap;
 
+        return keyboardBox;
+    }
+
+    public FlexLayout CreateTopLayout()
+    {
         Label titleLabel = new Label()
         {
             Text = "Раунд 1",
@@ -80,6 +120,7 @@ public partial class EnterWordPage : ContentPage
             VerticalOptions = LayoutOptions.CenterAndExpand,
             HorizontalOptions = LayoutOptions.Center
         };
+
         var topStack = new FlexLayout()
         {
             HorizontalOptions = LayoutOptions.Fill,
@@ -87,15 +128,20 @@ public partial class EnterWordPage : ContentPage
             JustifyContent = FlexJustify.SpaceBetween,
         };
 
+        return topStack;
+    }
+
+    public StackLayout CreateClueLayout()
+    {
         Label enterWordLabel = new Label()
-        { 
+        {
             Text = "Введите слово",
             TextColor = Colors.Navy,
             FontSize = 45,
             FontFamily = "Maki-Sans",
             VerticalOptions = LayoutOptions.CenterAndExpand,
             HorizontalOptions = LayoutOptions.Center,
-            Margin = new Thickness(0,40,0,0)
+            Margin = new Thickness(0, 40, 0, 0)
         };
 
         Label clueLabel = new Label()
@@ -116,7 +162,11 @@ public partial class EnterWordPage : ContentPage
             HorizontalOptions = LayoutOptions.Center,
         };
 
+        return enterWordStack;
+    }
 
+    public Grid CreateEnterWordLayout()
+    {
         var enterWordImage = new Image()
         {
             WidthRequest = 500,
@@ -158,33 +208,9 @@ public partial class EnterWordPage : ContentPage
             Children = { enterWordImage, userTextLabel, checkWordBox }
         };
 
-        StackLayout grid = new StackLayout
-        {
-            Children = { topStack, enterWordStack, enterWordBox, keyboardBox },
-            VerticalOptions = LayoutOptions.FillAndExpand,
-            HorizontalOptions = LayoutOptions.FillAndExpand,
-        };
-
-        FlexLayout.SetBasis(grid, new FlexBasis(1f, true));
-
-
-        var backgroundImage = new Image
-        {
-            Source = "background.png",
-            Aspect = Aspect.AspectFill,
-        };
-
-        Content = new Grid
-        {
-            VerticalOptions = LayoutOptions.FillAndExpand,
-            HorizontalOptions = LayoutOptions.FillAndExpand,
-            Children =
-            {
-                backgroundImage,
-                grid
-            }
-        };
+        return enterWordBox;
     }
+
     public void OnKeyboardButtonClicked(object sender, EventArgs e)
     {
         Button button = (Button)sender;
