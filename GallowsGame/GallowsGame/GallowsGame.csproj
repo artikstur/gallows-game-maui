@@ -57,6 +57,7 @@
 
 	<ItemGroup>
 	  <None Remove="Resources\Fonts\Maki-Sans.ttf" />
+	  <None Remove="Resources\Images\7_round.png" />
 	  <None Remove="Resources\Images\back_bttn.png" />
 	  <None Remove="Resources\Images\coin.png" />
 	  <None Remove="Resources\Images\firstbttn.png" />
