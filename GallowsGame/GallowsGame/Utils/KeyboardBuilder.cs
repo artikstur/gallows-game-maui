@@ -15,9 +15,12 @@ namespace GallowsGame.Utils
             ' ', 'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ё', ' ', 'Ж', 'З', 'И', 'Й', 'К', 'Л', 'М', 'Н', 'О', 'П', 'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ъ', 'Ы', 'Ь', 'Э', 'Ю', 'Я'
         };
 
+        private static HashSet<char> vowels = new HashSet<char> { 'А', 'Е', 'Ё', 'И', 'О', 'У', 'Ы', 'Э', 'Ю', 'Я' };
+        public static EnterWordPage CurrentPage { get; private set; }
         public static CustomKeyboard CreateKeyboard(EnterWordPage page)
         {
             CustomKeyboard keyboard = new CustomKeyboard();
+            CurrentPage = page;
             foreach (var symbol in Symbols)
             {
                 if (symbol == ' ')
@@ -53,6 +56,8 @@ namespace GallowsGame.Utils
                 }
                 else
                 {
+                    var textColor = vowels.Contains(symbol) ? Colors.Red : Colors.Navy;
+
                     Button innerBtn = new Button()
                     {
                         FontSize = 30,
@@ -61,7 +66,7 @@ namespace GallowsGame.Utils
                         FontFamily = "Maki-Sans",
                         BackgroundColor = Colors.Transparent,
                         Text = symbol.ToString(),
-                        TextColor = Colors.Navy,
+                        TextColor = textColor,
                         HorizontalOptions = LayoutOptions.Center,
                         VerticalOptions = LayoutOptions.Center,
                     };
@@ -85,7 +90,46 @@ namespace GallowsGame.Utils
                     keyboard.Buttons.Add(button);
                 }
             }
+
+            keyboard.Buttons.Add(CreateBackSpaceBtn());
+
             return keyboard;
+        }
+
+
+        private static Grid CreateBackSpaceBtn()
+        {
+            var backspaceInnerButton = new Button
+            {
+                FontSize = 30,
+                HeightRequest = 58,
+                WidthRequest = 58,
+                BackgroundColor = Colors.Transparent,
+                TextColor = Colors.Navy,
+                FontFamily = "Maki-Sans",
+                HorizontalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.Center,
+            };
+
+            backspaceInnerButton.Clicked += CurrentPage.OnClearButtonClicked;
+
+            var backspaceButton = new Grid
+            {
+                Children =
+                        {
+                            new Image()
+                            {
+                                 HeightRequest = 72,
+                                 WidthRequest = 72,
+                                 Source = "backspace_bttn.png",
+                                 Margin = 4,
+                            },
+
+                            backspaceInnerButton,
+                        },
+            };
+
+            return backspaceButton;
         }
     }
 }
