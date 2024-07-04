@@ -1,0 +1,28 @@
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="GallowsGame.Pages.GameRulesPage"
+             Title="GameRulesPage"
+             BackgroundImageSource = "rule_bg.png">
+
+
+    <Grid>
+
+        <ImageButton x:Name="PauseButton"
+                     Source="back_bttn.png"
+                     HorizontalOptions="End"
+                     VerticalOptions="Start"
+                     WidthRequest="100"
+                     HeightRequest="80"
+                     Clicked="OnBackToMainPageBttnClicked"
+                     Margin="0,5,15,0" />
+        <Label Text="назад"
+                   FontSize="26"
+                   Margin="0,84,23,0"
+                   FontFamily="Maki-Sans"
+                   HorizontalOptions="End"
+                  VerticalOptions="Start"
+                   TextColor="Navy" />
+
+    </Grid>
+
+</ContentPage>

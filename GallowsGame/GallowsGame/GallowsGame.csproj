@@ -47,7 +47,6 @@
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
-		<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
 
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
@@ -57,9 +56,43 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Fonts\Maki-Sans.ttf" />
+	  <None Remove="Resources\Fonts\MP Manga.ttf" />
+	  <None Remove="Resources\Images\back_bttn.png" />
+	  <None Remove="Resources\Images\coin.png" />
+	  <None Remove="Resources\Images\firstbttn.png" />
+	  <None Remove="Resources\Images\firstPageBg.png" />
+	  <None Remove="Resources\Images\gallow_concept.png" />
+	  <None Remove="Resources\Images\ok_bttn.png" />
+	  <None Remove="Resources\Images\round.png" />
+	  <None Remove="Resources\Images\rule_bg.png" />
+	  <None Remove="Resources\Images\secondbttn.png" />
+	  <None Remove="Resources\Images\stick.png" />
+	  <None Remove="Resources\Images\thirdbttn.png" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="ModalWindows\CustomErrorDialog.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\EnterWordPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\GamePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\GameRulesPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\MenuPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	</ItemGroup>
 
 </Project>

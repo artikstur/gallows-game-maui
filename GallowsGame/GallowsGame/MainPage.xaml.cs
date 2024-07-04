@@ -1,25 +1,40 @@
-﻿namespace GallowsGame
+﻿using GallowsGame.Pages;
+
+namespace GallowsGame
 {
     public partial class MainPage : ContentPage
     {
-        int count = 0;
 
         public MainPage()
         {
             InitializeComponent();
         }
 
-        private void OnCounterClicked(object sender, EventArgs e)
+        private async void OnExitButtonClicked(object sender, EventArgs e)
         {
-            count++;
+            Button button = (Button)sender;
+            await button.ScaleTo(1.2, 100, Easing.Linear);
+            await button.ScaleTo(1, 100, Easing.Linear);
 
-            if (count == 1)
-                CounterBtn.Text = $"Clicked {count} time";
-            else
-                CounterBtn.Text = $"Clicked {count} times";
+            Environment.Exit(0);
+        }
 
-            SemanticScreenReader.Announce(CounterBtn.Text);
+        private async void OnStartGameButtonClicked(object sender, EventArgs e)
+        {
+            Button button = (Button)sender;
+            await button.ScaleTo(1.2, 100, Easing.Linear);
+            await button.ScaleTo(1, 100, Easing.Linear);
+
+            await Navigation.PushAsync(new EnterWordPage());
+        }
+
+        private async void OnGameRulesButtonClicked(object sender, EventArgs e)
+        {
+            Button button = (Button)sender;
+            await button.ScaleTo(1.2, 100, Easing.Linear);
+            await button.ScaleTo(1, 100, Easing.Linear);
+
+            await Navigation.PushAsync(new GameRulesPage());
         }
     }
-
 }
