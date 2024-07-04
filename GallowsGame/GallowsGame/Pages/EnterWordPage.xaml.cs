@@ -16,8 +16,7 @@ public partial class EnterWordPage : ContentPage
         VerticalOptions = LayoutOptions.Center,
         HorizontalOptions = LayoutOptions.Center
     };
-    public string userText { get; set; }
-
+    private string userText;
 
     public EnterWordPage()
     {
@@ -201,6 +200,7 @@ public partial class EnterWordPage : ContentPage
     {
         Button button = (Button)sender;
         button.BackgroundColor = Colors.Aqua;
+
         if (userTextLabel.Text.Length > 0)
         {
             userTextLabel.Text = userTextLabel.Text.Remove(userTextLabel.Text.Length - 1);
