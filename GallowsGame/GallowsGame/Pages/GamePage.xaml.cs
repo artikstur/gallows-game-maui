@@ -11,7 +11,6 @@ public partial class GamePage : ContentPage
     private int coinCount = 3;
     private string hiddenWord;
     private string currentOpenedWord; //отгаданное на данный момент слово
-    private int currentIndex;
     private Label currentWord;
     public GamePage(string userText)
     {
@@ -37,6 +36,7 @@ public partial class GamePage : ContentPage
             FontFamily = "Maki-Sans",
             Text = coinCount.ToString(),
             FontSize = 50,
+            TextColor = Colors.Black
         };
 
         var coinBox = new FlexLayout()
@@ -49,8 +49,9 @@ public partial class GamePage : ContentPage
             FontFamily = "Maki-Sans", 
             Margin = new Thickness(0, 11, 0, 0),
             HorizontalOptions = LayoutOptions.Center,
-            Text = "СЛОВО:",
-            FontSize = 50,
+            Text = "Слово:",
+            FontSize = 30,
+            TextColor = Colors.Navy
         };
 
         currentWord = new Label()
@@ -59,6 +60,8 @@ public partial class GamePage : ContentPage
             HorizontalOptions = LayoutOptions.Center,
             Text = currentOpenedWord,
             FontSize = 60,
+            TextColor = Colors.Red,
+            Margin = new Thickness(0,10,0,0)
         };
 
         var leftBarCenterBox = new VerticalStackLayout()
@@ -123,6 +126,7 @@ public partial class GamePage : ContentPage
             FontFamily = "Maki-Sans",
             Text = "Подсказка - ",
             FontSize = 50,
+            TextColor = Colors.Black
         };
 
         var coinImage = new Image()
@@ -238,18 +242,22 @@ public partial class GamePage : ContentPage
         button.IsEnabled = false;
         button.IsEnabled = false;
         button.Background = Colors.Transparent;
-        button.TextColor = button.TextColor; 
+        button.TextColor = Colors.Black; 
 
         if (hiddenWord.Contains(button.Text))
         {
             image.Source = "right_letter.png";
 
             StringBuilder sb = new StringBuilder(currentOpenedWord);
-            sb[currentIndex] = button.Text[0];
+            int index = -1;
+
+            while ((index = hiddenWord.IndexOf(button.Text, index + 1)) != -1)
+            {
+                sb[index] = button.Text[0];
+            }
+
             currentOpenedWord = sb.ToString();
             currentWord.Text = currentOpenedWord;
-
-            currentIndex++;
         }
         else
         {
