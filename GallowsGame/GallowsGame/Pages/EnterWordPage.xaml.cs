@@ -174,17 +174,9 @@ public partial class EnterWordPage : ContentPage
             Source = "inroductory_line.png",
         };
 
-        var checkWordImage = new Image()
+        ImageButton innerBtn = new ImageButton()
         {
-            WidthRequest = 70,
-            HeightRequest = 70,
             Source = "confirm_bttn.png",
-            HorizontalOptions = LayoutOptions.End,
-            Margin = new Thickness(0, 0, 400, 0)
-        };
-
-        Button innerBtn = new Button()
-        {
             WidthRequest = 70,
             HeightRequest = 70,
             BackgroundColor = Colors.Transparent,
@@ -194,27 +186,20 @@ public partial class EnterWordPage : ContentPage
 
         innerBtn.Clicked += OnSubmitButtonClicked;
 
-        var checkWordBox = new Grid()
-        {
-            Children =
-            {
-                checkWordImage,
-                innerBtn
-            }
-        };
-
         var enterWordBox = new Grid()
         {
-            Children = { enterWordImage, userTextLabel, checkWordBox }
+            Children = { enterWordImage, userTextLabel, innerBtn }
         };
 
         return enterWordBox;
     }
 
-    public void OnKeyboardButtonClicked(object sender, EventArgs e)
+    public async void OnKeyboardButtonClicked(object sender, EventArgs e)
     {
         Button button = (Button)sender;
-        button.BackgroundColor = Colors.Aqua;
+        await button.ScaleTo(1.2, 100, Easing.Linear);
+        await button.ScaleTo(1, 100, Easing.Linear);
+
         if (userTextLabel.Text.Length < 8)
         {
             userTextLabel.Text += button.Text;
@@ -222,10 +207,11 @@ public partial class EnterWordPage : ContentPage
         }
     }
 
-    public void OnClearButtonClicked(object sender, EventArgs e)
+    public async void OnClearButtonClicked(object sender, EventArgs e)
     {
-        Button button = (Button)sender;
-        button.BackgroundColor = Colors.Aqua;
+        ImageButton button = (ImageButton)sender;
+        await button.ScaleTo(1.2, 100, Easing.Linear);
+        await button.ScaleTo(1, 100, Easing.Linear);
 
         if (userTextLabel.Text.Length > 0)
         {
@@ -234,10 +220,11 @@ public partial class EnterWordPage : ContentPage
         }
     }
 
-    public void OnSubmitButtonClicked(object sender, EventArgs e)
+    public async void OnSubmitButtonClicked(object sender, EventArgs e)
     {
-        Button button = (Button)sender;
-        button.BackgroundColor = Colors.Aqua;
+        ImageButton button = (ImageButton)sender;
+        await button.ScaleTo(1.2, 100, Easing.Linear);
+        await button.ScaleTo(1, 100, Easing.Linear);
 
         if (!(userTextLabel.Text.Length > 2 && userTextLabel.Text.Length < 9))
         {
@@ -245,12 +232,16 @@ public partial class EnterWordPage : ContentPage
             return; 
         }
 
-        Navigation.PushAsync(new GamePage(userTextLabel.Text));
+        await Navigation.PushAsync(new GamePage(userTextLabel.Text));
     }
 
-    public void OnPauseButtonClicked(object sender, EventArgs e)
+    public async void OnPauseButtonClicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new MenuPage());
+        ImageButton button = (ImageButton)sender;
+        await button.ScaleTo(1.2, 100, Easing.Linear);
+        await button.ScaleTo(1, 100, Easing.Linear);
+        
+        await Navigation.PushAsync(new MenuPage());
     }
 
     public async static void ShowError(string message)

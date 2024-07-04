@@ -103,14 +103,13 @@ namespace GallowsGame.Utils
 
         private static Grid CreateBackSpaceBtn(Action<object, EventArgs> onClearButtonClicked)
         {
-            var backspaceInnerButton = new Button
+            var backspaceInnerButton = new ImageButton
             {
-                FontSize = 30,
-                HeightRequest = 58,
-                WidthRequest = 58,
+                HeightRequest = 72,
+                WidthRequest = 72,
+                Margin = 4,
+                Source = "backspace_bttn.png",
                 BackgroundColor = Colors.Transparent,
-                TextColor = Colors.Navy,
-                FontFamily = "Maki-Sans",
                 HorizontalOptions = LayoutOptions.Center,
                 VerticalOptions = LayoutOptions.Center,
             };
@@ -121,14 +120,6 @@ namespace GallowsGame.Utils
             {
                 Children =
                         {
-                            new Image()
-                            {
-                                 HeightRequest = 72,
-                                 WidthRequest = 72,
-                                 Source = "backspace_bttn.png",
-                                 Margin = 4,
-                            },
-
                             backspaceInnerButton,
                         },
             };
