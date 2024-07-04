@@ -1,3 +1,4 @@
+using GallowsGame.Utils;
 using Microsoft.Maui.Layouts;
 
 namespace GallowsGame.Pages;
@@ -66,6 +67,7 @@ public partial class GamePage : ContentPage
             HeightRequest = 80,
             WidthRequest = 80,
         };
+
         pauseBtn.Clicked += OnPauseButtonClicked;
 
         FlexLayout.SetBasis(coinBox, new FlexBasis(0.33f, true));
@@ -88,7 +90,7 @@ public partial class GamePage : ContentPage
     {
         var gallowsImage = new Image()
         {
-            Margin = 50,
+            Margin = 30,
             Source = "gallow_concept.png",
         };
 
@@ -105,11 +107,36 @@ public partial class GamePage : ContentPage
             Children = { gallowsImage },
         };
 
+        var keyboardLayOut = CreateKeyBoardLayout(700);
+        FlexLayout.SetBasis(gallowsImage, new FlexBasis(1f, true));
+
+        var cluePriceLabel = new Label()
+        {
+            Text = "Подсказка - ",
+            FontSize = 50,
+        };
+
+        var coinImage = new Image()
+        {
+            Margin = new Thickness(5, 14, 0, 0),
+            Source = "coin.png",
+            HeightRequest = 40,
+            WidthRequest = 40,
+        };
+
+        var clueBox = new FlexLayout()
+        {
+            Margin = new Thickness(0, 30, 0, 0),
+            Children = { cluePriceLabel, coinImage },
+            HorizontalOptions = LayoutOptions.Center,
+            AlignContent = FlexAlignContent.Start,
+        };
+
         var rightCenterBox = new StackLayout()
         {
-            BackgroundColor = Colors.Aqua,
-            VerticalOptions = LayoutOptions.FillAndExpand,
-            HorizontalOptions = LayoutOptions.FillAndExpand,
+            Children = { keyboardLayOut, clueBox },
+            VerticalOptions = LayoutOptions.Center,
+            HorizontalOptions = LayoutOptions.Start,
         };
 
         var centerBox = new FlexLayout()
@@ -155,5 +182,45 @@ public partial class GamePage : ContentPage
     public void OnPauseButtonClicked(object sender, EventArgs e)
     {
         Navigation.PushAsync(new MenuPage());
+    }
+
+    private StackLayout CreateKeyBoardLayout(int boxSize)
+    {
+        var keyboard = KeyboardBuilder.CreateKeyboard(this, OnKeyboardButtonClicked, OnClearButtonClicked, false);
+
+        var keyboardLayout = new FlexLayout()
+        {
+            WidthRequest = 600,
+            JustifyContent = FlexJustify.Center,
+            HorizontalOptions = LayoutOptions.Center
+        };
+
+        var keyboardBox = new StackLayout()
+        {
+            Children = { keyboardLayout },
+            HorizontalOptions = LayoutOptions.Center,
+            VerticalOptions = LayoutOptions.Center,
+        };
+
+        foreach (var item in keyboard)
+        {
+            keyboardLayout.Children.Add(item);
+        }
+
+        keyboardLayout.Wrap = FlexWrap.Wrap;
+
+        return keyboardBox;
+    }
+
+    public void OnKeyboardButtonClicked(object sender, EventArgs e)
+    {
+        Button button = (Button)sender;
+        button.BackgroundColor = Colors.Aqua;
+    }
+
+    public void OnClearButtonClicked(object sender, EventArgs e)
+    {
+        Button button = (Button)sender;
+        button.BackgroundColor = Colors.Aqua;
     }
 }
