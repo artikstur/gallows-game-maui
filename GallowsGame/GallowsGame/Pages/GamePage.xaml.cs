@@ -10,6 +10,16 @@ public partial class GamePage : ContentPage
 		InitializeComponent();
 		this.userText = userText;
 
+        var gallowImage = new Image()
+        {
+            WidthRequest = 450,
+            HeightRequest = 800,
+            Source = "gallow_concept.png",
+            HorizontalOptions = LayoutOptions.Center,
+            VerticalOptions = LayoutOptions.Center,
+            Margin = new Thickness(0, -100, 0,0)
+        };
+
         var TopBar = new StackLayout()
         {
             Children = { },
@@ -21,6 +31,7 @@ public partial class GamePage : ContentPage
 		var LeftCenterBox = new StackLayout()
 		{
             BackgroundColor = Colors.Beige,
+            Children = { gallowImage},
             VerticalOptions = LayoutOptions.FillAndExpand,
             HorizontalOptions = LayoutOptions.FillAndExpand,
         };

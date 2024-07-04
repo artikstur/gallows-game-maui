@@ -61,6 +61,7 @@
 	  <None Remove="Resources\Images\coin.png" />
 	  <None Remove="Resources\Images\firstbttn.png" />
 	  <None Remove="Resources\Images\firstPageBg.png" />
+	  <None Remove="Resources\Images\gallow_concept.png" />
 	  <None Remove="Resources\Images\rule_bg.png" />
 	  <None Remove="Resources\Images\secondbttn.png" />
 	  <None Remove="Resources\Images\thirdbttn.png" />
