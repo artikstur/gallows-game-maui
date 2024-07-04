@@ -1,5 +1,7 @@
 using GallowsGame.Utils;
 using Microsoft.Maui.Layouts;
+using System.Security.AccessControl;
+using System.Xml.XPath;
 
 namespace GallowsGame.Pages;
 
@@ -8,7 +10,9 @@ public partial class EnterWordPage : ContentPage
     Label userTextLabel = new Label()
     {
         Text = "",
-        FontSize = 36,
+        FontSize = 34,
+        TextColor = Colors.Navy,
+        FontFamily = "Maki-Sans",
         VerticalOptions = LayoutOptions.Center,
         HorizontalOptions = LayoutOptions.Center
     };
@@ -49,24 +53,29 @@ public partial class EnterWordPage : ContentPage
         {
             Text = "Раунд 1",
             TextColor = Colors.Red,
-            FontSize = 45,
+            FontSize = 48,
+            FontFamily = "Maki-Sans",
             VerticalOptions = LayoutOptions.CenterAndExpand,
             HorizontalOptions = LayoutOptions.Center
         };
 
-        var pauseImage = new Image()
+        var pauseImageBttn = new ImageButton()
         {
-            HeightRequest = 100,
-            WidthRequest = 100,
+            HeightRequest = 80,
+            WidthRequest = 80,
             Source = "pausebttn.png",
             VerticalOptions = LayoutOptions.CenterAndExpand,
-            HorizontalOptions = LayoutOptions.Center
+            HorizontalOptions = LayoutOptions.Center,
+             Margin = new Thickness(0, 4, 10, 0),
         };
+
+        pauseImageBttn.Clicked += OnPauseButtonClicked;
 
         var emptyLabel = new Label()
         {
             Text = "Раунд",
             FontSize = 45,
+            FontFamily = "Maki-Sans",
             Opacity = 0,
             VerticalOptions = LayoutOptions.CenterAndExpand,
             HorizontalOptions = LayoutOptions.Center
@@ -74,29 +83,34 @@ public partial class EnterWordPage : ContentPage
         var topStack = new FlexLayout()
         {
             HorizontalOptions = LayoutOptions.Fill,
-            Children = { emptyLabel, titleLabel, pauseImage },
+            Children = { emptyLabel, titleLabel, pauseImageBttn },
             JustifyContent = FlexJustify.SpaceBetween,
         };
 
         Label enterWordLabel = new Label()
-        {
+        { 
             Text = "Введите слово",
-            FontSize = 35,
+            TextColor = Colors.Navy,
+            FontSize = 45,
+            FontFamily = "Maki-Sans",
             VerticalOptions = LayoutOptions.CenterAndExpand,
-            HorizontalOptions = LayoutOptions.Center
+            HorizontalOptions = LayoutOptions.Center,
+            Margin = new Thickness(0,40,0,0)
         };
 
         Label clueLabel = new Label()
         {
             Text = "(3-8 букв)",
+            FontFamily = "Maki-Sans",
             FontSize = 23,
+            TextColor = Colors.Navy,
             VerticalOptions = LayoutOptions.CenterAndExpand,
             HorizontalOptions = LayoutOptions.Center
         };
 
         var enterWordStack = new StackLayout()
         {
-            Padding = 30,
+            Padding = 20,
             Children = { enterWordLabel, clueLabel },
             VerticalOptions = LayoutOptions.Center,
             HorizontalOptions = LayoutOptions.Center,
@@ -105,8 +119,8 @@ public partial class EnterWordPage : ContentPage
 
         var enterWordImage = new Image()
         {
-            WidthRequest = 450,
-            HeightRequest = 150,
+            WidthRequest = 500,
+            HeightRequest = 200,
             Source = "inroductory_line.png",
         };
 
@@ -202,5 +216,10 @@ public partial class EnterWordPage : ContentPage
         {
             return;
         }
+    }
+
+    public void OnPauseButtonClicked(object sender, EventArgs e)
+    {
+        Navigation.PushAsync(new MenuPage());
     }
 }

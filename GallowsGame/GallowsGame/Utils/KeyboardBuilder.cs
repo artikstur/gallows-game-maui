@@ -33,15 +33,16 @@ namespace GallowsGame.Utils
                                 WidthRequest = 58,
                                 BackgroundColor = Colors.Transparent,
                                 Text = symbol.ToString(),
-                                TextColor = Colors.Black,
+                                TextColor = Colors.Navy,
+                                FontFamily = "Maki-Sans",
                                 HorizontalOptions = LayoutOptions.Center,
                                 VerticalOptions = LayoutOptions.Center,
                             },
 
                             new Image()
                             {
-                                 HeightRequest = 68,
-                                 WidthRequest = 68,
+                                 HeightRequest = 72,
+                                 WidthRequest = 72,
                                  Source = "letter_button.png",
                                  Margin = 4,
                             }
@@ -57,9 +58,10 @@ namespace GallowsGame.Utils
                         FontSize = 30,
                         HeightRequest = 58,
                         WidthRequest = 58,
+                        FontFamily = "Maki-Sans",
                         BackgroundColor = Colors.Transparent,
                         Text = symbol.ToString(),
-                        TextColor = Colors.Black,
+                        TextColor = Colors.Navy,
                         HorizontalOptions = LayoutOptions.Center,
                         VerticalOptions = LayoutOptions.Center,
                     };

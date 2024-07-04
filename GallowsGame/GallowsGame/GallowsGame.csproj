@@ -56,7 +56,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Remove="Resources\Fonts\makisans.ttf" />
+	  <None Remove="Resources\Fonts\Maki-Sans.ttf" />
 	  <None Remove="Resources\Images\back_bttn.png" />
 	  <None Remove="Resources\Images\firstbttn.png" />
 	  <None Remove="Resources\Images\firstPageBg.png" />
@@ -76,6 +76,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\GameRulesPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\MenuPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
