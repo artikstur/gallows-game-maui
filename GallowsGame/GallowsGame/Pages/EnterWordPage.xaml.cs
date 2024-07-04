@@ -241,7 +241,7 @@ public partial class EnterWordPage : ContentPage
 
         if (!(userTextLabel.Text.Length > 2 && userTextLabel.Text.Length < 9))
         {
-            DisplayAlert("Ошибка", "Минимум 3 символа и максимум 8", "ОK");
+            ShowError("минимум 3 буквы, максимум - 8");
             return; 
         }
 
@@ -253,4 +253,9 @@ public partial class EnterWordPage : ContentPage
         Navigation.PushAsync(new MenuPage());
     }
 
+    public async static void ShowError(string message)
+    {
+        var errorDialog = new CustomErrorDialog(message);
+        await Application.Current.MainPage.Navigation.PushModalAsync(errorDialog);
+    }
 }

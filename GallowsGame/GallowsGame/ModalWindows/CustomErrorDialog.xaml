@@ -1,0 +1,40 @@
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="GallowsGame.CustomErrorDialog"
+             BackgroundColor="Transparent"
+            >
+    
+    <ContentPage.Content>
+        <Grid VerticalOptions="CenterAndExpand"
+              HorizontalOptions="CenterAndExpand"
+              WidthRequest="450"
+              HeightRequest="450">
+            <Image
+                    WidthRequest="900"
+                    HeightRequest="700"
+                    Source="stick.png">
+            </Image>
+
+            <Label x:Name="ErrorMessage"
+                     FontSize="34"
+                     FontFamily="MP Manga Font"
+                     HorizontalOptions="Center"
+                     VerticalOptions="Center"
+                     Opacity="0.9"
+                     Margin="0,0,10,40"
+                     HorizontalTextAlignment="Center"
+                     TextColor="Black"/>
+            
+            <ImageButton
+                     Margin="-25,280,0,40"
+                     Source="ok_bttn.png"
+                     HorizontalOptions="Center"
+                     VerticalOptions="Center"
+                     WidthRequest="160"
+                     HeightRequest="120"
+                     BackgroundColor="Transparent"
+                     Clicked="OnOkClicked"/>
+          
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>
