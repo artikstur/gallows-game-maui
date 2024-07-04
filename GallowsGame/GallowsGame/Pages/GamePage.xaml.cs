@@ -188,9 +188,13 @@ public partial class GamePage : ContentPage
             }
         };
     }
-    public void OnPauseButtonClicked(object sender, EventArgs e)
+    public async void OnPauseButtonClicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new MenuPage());
+        ImageButton button = (ImageButton) sender;
+        await button.ScaleTo(1.2, 100, Easing.Linear);
+        await button.ScaleTo(1, 100, Easing.Linear);
+
+        await Navigation.PushAsync(new MenuPage());
     }
 
     private StackLayout CreateKeyBoardLayout(int boxSize)
@@ -222,9 +226,12 @@ public partial class GamePage : ContentPage
     }
     
 
-    public void OnKeyboardButtonClicked(object sender, EventArgs e)
+    public async void OnKeyboardButtonClicked(object sender, EventArgs e)
     {
         Button button = (Button)sender;
+        await button.ScaleTo(1.2, 100, Easing.Linear);
+        await button.ScaleTo(1, 100, Easing.Linear);
+
         Grid parentGrid = (Grid)button.Parent;
         Image image = parentGrid.Children.OfType<Image>().FirstOrDefault();
 
@@ -253,5 +260,6 @@ public partial class GamePage : ContentPage
     public void OnClearButtonClicked(object sender, EventArgs e)
     {
         Button button = (Button)sender;
+        
     }
 }
