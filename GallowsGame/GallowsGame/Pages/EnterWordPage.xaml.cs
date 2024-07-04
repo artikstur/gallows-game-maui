@@ -66,7 +66,8 @@ public partial class EnterWordPage : ContentPage
             Source = "pausebttn.png",
             VerticalOptions = LayoutOptions.CenterAndExpand,
             HorizontalOptions = LayoutOptions.Center,
-             Margin = new Thickness(0, 4, 10, 0),
+            Margin = new Thickness(0, 4, 10, 0),
+            BackgroundColor = Colors.Transparent,
         };
 
         pauseImageBttn.Clicked += OnPauseButtonClicked;
@@ -212,10 +213,12 @@ public partial class EnterWordPage : ContentPage
         Button button = (Button)sender;
         button.BackgroundColor = Colors.Aqua;
 
-        if (!(userTextLabel.Text.Length > 2 && userTextLabel.Text.Length < 9))
-        {
-            return;
-        }
+        //if (!(userTextLabel.Text.Length > 2 && userTextLabel.Text.Length < 9))
+        //{
+        //    return;
+        //}
+
+        Navigation.PushAsync(new GamePage(userText));
     }
 
     public void OnPauseButtonClicked(object sender, EventArgs e)
