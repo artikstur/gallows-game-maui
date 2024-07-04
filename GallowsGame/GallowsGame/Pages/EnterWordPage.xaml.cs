@@ -213,10 +213,12 @@ public partial class EnterWordPage : ContentPage
         Button button = (Button)sender;
         button.BackgroundColor = Colors.Aqua;
 
-        if (!(userTextLabel.Text.Length > 2 && userTextLabel.Text.Length < 9))
-        {
-            return;
-        }
+        //if (!(userTextLabel.Text.Length > 2 && userTextLabel.Text.Length < 9))
+        //{
+        //    return;
+        //}
+
+        Navigation.PushAsync(new GamePage(userText));
     }
 
     public void OnPauseButtonClicked(object sender, EventArgs e)
