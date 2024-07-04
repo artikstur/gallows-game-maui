@@ -21,7 +21,7 @@ public partial class GamePage : ContentPage
     {
         var coinImage = new Image()
         {
-            Margin = new Thickness(10, 11, 5, 10),
+            Margin = new Thickness(10, 3, 5, 10),
             Source = "coin.png",
             HeightRequest = 50,
             WidthRequest = 50,
@@ -219,12 +219,21 @@ public partial class GamePage : ContentPage
     public void OnKeyboardButtonClicked(object sender, EventArgs e)
     {
         Button button = (Button)sender;
-        button.BackgroundColor = Colors.Aqua;
+        //button.BackgroundColor = Colors.Aqua;
+
+        Grid parentGrid = (Grid)button.Parent;
+        Image image = parentGrid.Children.OfType<Image>().FirstOrDefault();
+
+        if (image != null)
+        {
+            image.Source = "right_letter.png"; // тут условие будет, по которому уже будет выставляться либо зеленый, либо красный 
+            image.Source = "wrong_letter.png";
+        }
     }
 
     public void OnClearButtonClicked(object sender, EventArgs e)
     {
         Button button = (Button)sender;
-        button.BackgroundColor = Colors.Aqua;
+        //button.BackgroundColor = Colors.Aqua;
     }
 }
