@@ -29,6 +29,7 @@ public partial class GamePage : ContentPage
 
         var balanceLabel = new Label()
         {
+            FontFamily = "Maki-Sans",
             Text = coinCount.ToString(),
             FontSize = 50,
         };
@@ -40,17 +41,19 @@ public partial class GamePage : ContentPage
 
         var currentWordClue = new Label()
         {
+            FontFamily = "Maki-Sans", 
             Margin = new Thickness(0, 11, 0, 0),
             HorizontalOptions = LayoutOptions.Center,
-            Text = "Слово:",
-            FontSize = 40,
+            Text = "СЛОВО:",
+            FontSize = 50,
         };
 
         var currentWord = new Label()
         {
+            FontFamily = "Maki-Sans",
             HorizontalOptions = LayoutOptions.Center,
             Text = this.currentOpenedWord,
-            FontSize = 50,
+            FontSize = 60,
         };
 
         var leftBarCenterBox = new VerticalStackLayout()
@@ -112,13 +115,14 @@ public partial class GamePage : ContentPage
 
         var cluePriceLabel = new Label()
         {
+            FontFamily = "Maki-Sans",
             Text = "Подсказка - ",
             FontSize = 50,
         };
 
         var coinImage = new Image()
         {
-            Margin = new Thickness(5, 14, 0, 0),
+            Margin = new Thickness(5, 3, 0, 0),
             Source = "coin.png",
             HeightRequest = 40,
             WidthRequest = 40,
