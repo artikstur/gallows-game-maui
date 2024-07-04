@@ -5,12 +5,44 @@
              BackgroundImageSource = "background.png"
              Title="MenuPage">
 
+    
     <Grid VerticalOptions="StartAndExpand">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Image Source="coin.png" 
+               Grid.Row="0" 
+               Grid.Column="0"
+                 WidthRequest="50"
+                   HeightRequest="50"
+               VerticalOptions="Start"
+               HorizontalOptions="Start"
+               Margin="10" />
+
+            <Label Text="3" 
+                   FontFamily="Maki-Sans"
+                   FontSize="58"
+                  TextColor="Black"
+               Grid.Row="0" 
+               Grid.Column="1"
+               VerticalOptions="Center"
+               HorizontalOptions="Start"
+               Margin="-4,9"
+               />
+        </Grid>
+        
         <StackLayout Grid.Row="0"
              HorizontalOptions="CenterAndExpand"
              Margin="0,30,50,0">
