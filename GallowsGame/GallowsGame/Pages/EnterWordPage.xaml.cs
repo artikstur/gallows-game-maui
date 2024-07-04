@@ -66,7 +66,8 @@ public partial class EnterWordPage : ContentPage
             Source = "pausebttn.png",
             VerticalOptions = LayoutOptions.CenterAndExpand,
             HorizontalOptions = LayoutOptions.Center,
-             Margin = new Thickness(0, 4, 10, 0),
+            Margin = new Thickness(0, 4, 10, 0),
+            BackgroundColor = Colors.Transparent,
         };
 
         pauseImageBttn.Clicked += OnPauseButtonClicked;
