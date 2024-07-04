@@ -1,5 +1,8 @@
 using GallowsGame.Utils;
 using Microsoft.Maui.Layouts;
+using System;
+using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace GallowsGame.Pages;
 
@@ -8,6 +11,8 @@ public partial class GamePage : ContentPage
     private int coinCount = 3;
     private string hiddenWord;
     private string currentOpenedWord; //отгаданное на данный момент слово
+    private int currentIndex;
+    private Label currentWord;
     public GamePage(string userText)
     {
         this.currentOpenedWord = new string('_', userText.Length);
@@ -48,11 +53,11 @@ public partial class GamePage : ContentPage
             FontSize = 50,
         };
 
-        var currentWord = new Label()
+        currentWord = new Label()
         {
             FontFamily = "Maki-Sans",
             HorizontalOptions = LayoutOptions.Center,
-            Text = this.currentOpenedWord,
+            Text = currentOpenedWord,
             FontSize = 60,
         };
 
@@ -215,18 +220,32 @@ public partial class GamePage : ContentPage
 
         return keyboardBox;
     }
+    
 
     public void OnKeyboardButtonClicked(object sender, EventArgs e)
     {
         Button button = (Button)sender;
-        //button.BackgroundColor = Colors.Aqua;
-
         Grid parentGrid = (Grid)button.Parent;
         Image image = parentGrid.Children.OfType<Image>().FirstOrDefault();
 
-        if (image != null)
+        button.IsEnabled = false;
+        button.IsEnabled = false;
+        button.Background = Colors.Transparent;
+        button.TextColor = button.TextColor; 
+
+        if (hiddenWord.Contains(button.Text))
         {
-            image.Source = "right_letter.png"; // тут условие будет, по которому уже будет выставляться либо зеленый, либо красный 
+            image.Source = "right_letter.png";
+
+            StringBuilder sb = new StringBuilder(currentOpenedWord);
+            sb[currentIndex] = button.Text[0];
+            currentOpenedWord = sb.ToString();
+            currentWord.Text = currentOpenedWord;
+
+            currentIndex++;
+        }
+        else
+        {
             image.Source = "wrong_letter.png";
         }
     }
@@ -234,6 +253,5 @@ public partial class GamePage : ContentPage
     public void OnClearButtonClicked(object sender, EventArgs e)
     {
         Button button = (Button)sender;
-        //button.BackgroundColor = Colors.Aqua;
     }
 }
