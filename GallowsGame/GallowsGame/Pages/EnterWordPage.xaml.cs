@@ -1,4 +1,5 @@
 using GallowsGame.Utils;
+using GallowsGame.Utils.ApiClients.YandexApi;
 using Microsoft.Maui.Layouts;
 using System.Security.AccessControl;
 using System.Xml.XPath;
@@ -230,6 +231,15 @@ public partial class EnterWordPage : ContentPage
         {
             ShowError("минимум 3 буквы, максимум - 8");
             return; 
+        }
+
+        var apiClient = new ApiClient();
+        var res = await apiClient.GetWordData(userTextLabel.Text);
+
+        if (!res)
+        {
+            ShowError("введенное слово должно быть именем существительным в единственном числе");
+            return;
         }
 
         await Navigation.PushAsync(new GamePage(userTextLabel.Text));
