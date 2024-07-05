@@ -1,7 +1,5 @@
 using GallowsGame.Utils;
 using Microsoft.Maui.Layouts;
-using System;
-using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace GallowsGame.Pages;
@@ -12,6 +10,9 @@ public partial class GamePage : ContentPage
     private string hiddenWord;
     private string currentOpenedWord; //отгаданное на данный момент слово
     private Label currentWord;
+    private Image gallowsImage;
+    private int attempts;
+    private int currentAttempts;
     public GamePage(string userText)
     {
         this.currentOpenedWord = new string('_', userText.Length);
@@ -46,7 +47,7 @@ public partial class GamePage : ContentPage
 
         var currentWordClue = new Label()
         {
-            FontFamily = "Maki-Sans", 
+            FontFamily = "Maki-Sans",
             Margin = new Thickness(0, 11, 0, 0),
             HorizontalOptions = LayoutOptions.Center,
             Text = "Слово:",
@@ -61,7 +62,7 @@ public partial class GamePage : ContentPage
             Text = currentOpenedWord,
             FontSize = 60,
             TextColor = Colors.Red,
-            Margin = new Thickness(0,10,0,0)
+            Margin = new Thickness(0, 10, 0, 0)
         };
 
         var leftBarCenterBox = new VerticalStackLayout()
@@ -99,7 +100,7 @@ public partial class GamePage : ContentPage
 
     public Image CreateGallowsImageLayout()
     {
-        var gallowsImage = new Image()
+        gallowsImage = new Image()
         {
             Margin = 30,
             Source = "gallow_concept.png",
@@ -194,7 +195,7 @@ public partial class GamePage : ContentPage
     }
     public async void OnPauseButtonClicked(object sender, EventArgs e)
     {
-        ImageButton button = (ImageButton) sender;
+        ImageButton button = (ImageButton)sender;
         await button.ScaleTo(1.2, 100, Easing.Linear);
         await button.ScaleTo(1, 100, Easing.Linear);
 
@@ -228,7 +229,7 @@ public partial class GamePage : ContentPage
 
         return keyboardBox;
     }
-    
+
 
     public async void OnKeyboardButtonClicked(object sender, EventArgs e)
     {
@@ -240,20 +241,50 @@ public partial class GamePage : ContentPage
         Image image = parentGrid.Children.OfType<Image>().FirstOrDefault();
 
         button.IsEnabled = false;
-        button.IsEnabled = false;
         button.Background = Colors.Transparent;
-        button.TextColor = Colors.Black; 
+        button.TextColor = Colors.Black;
 
-        if (hiddenWord.Contains(button.Text))
+        GuessLetter(button.Text, image);
+    }
+
+    public void CountAttempts()
+    {
+        if (hiddenWord.Length < 6)
+        {
+            attempts = 5;
+        }
+        else attempts = hiddenWord.Length;
+    }
+
+    public void DetermineOutcomeOfRound()
+    {
+
+        if (hiddenWord == currentOpenedWord)
+        {
+            ShowResult(new WinRoundWindow());
+            hiddenWord = "";
+        }
+        else if (currentAttempts >= attempts)
+        {
+            ShowResult(new LoseRoundWindow());
+        }
+    }
+
+    private void GuessLetter(string buttonText, Image image)
+    {
+
+        CountAttempts();
+
+        if (hiddenWord.Contains(buttonText))
         {
             image.Source = "right_letter.png";
 
             StringBuilder sb = new StringBuilder(currentOpenedWord);
             int index = -1;
 
-            while ((index = hiddenWord.IndexOf(button.Text, index + 1)) != -1)
+            while ((index = hiddenWord.IndexOf(buttonText, index + 1)) != -1)
             {
-                sb[index] = button.Text[0];
+                sb[index] = buttonText[0];
             }
 
             currentOpenedWord = sb.ToString();
@@ -261,13 +292,25 @@ public partial class GamePage : ContentPage
         }
         else
         {
+            currentAttempts++;
             image.Source = "wrong_letter.png";
+            gallowsImage.Source = "round.png";
         }
+
+        DetermineOutcomeOfRound();
+    }
+
+
+
+    public static void ShowResult(Page window) // тут короч интерфейс нельзя сделать общий, потому что метод Push только тип Page принимает
+    {
+        Application.Current.MainPage.Navigation.PushModalAsync(window);
     }
 
     public void OnClearButtonClicked(object sender, EventArgs e)
     {
         Button button = (Button)sender;
-        
     }
-}
+
+   
+} 
