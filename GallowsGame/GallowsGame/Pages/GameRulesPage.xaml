@@ -6,7 +6,6 @@
 
 
     <Grid>
-
         <ImageButton x:Name="PauseButton"
                      Source="back_bttn.png"
                      HorizontalOptions="End"
@@ -20,7 +19,7 @@
                    Margin="0,84,23,0"
                    FontFamily="Maki-Sans"
                    HorizontalOptions="End"
-                  VerticalOptions="Start"
+                   VerticalOptions="Start"
                    TextColor="Navy" />
 
     </Grid>
