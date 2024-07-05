@@ -10,9 +10,11 @@ public partial class GamePage : ContentPage
     private string hiddenWord;
     private string currentOpenedWord; //отгаданное на данный момент слово
     private Label currentWord;
-    private Image gallowsImage;
+    private List<Image> gallowsImages;
     private int attempts;
     private int currentAttempts;
+    private int currentIndex = 0;
+    private string folderPath;
     public GamePage(string userText)
     {
         this.currentOpenedWord = new string('_', userText.Length);
@@ -98,29 +100,58 @@ public partial class GamePage : ContentPage
         return topBar;
     }
 
-    public Image CreateGallowsImageLayout()
+    public List<Image> CreateGallowsImagesLayout(string path)
     {
-        gallowsImage = new Image()
-        {
-            Margin = 30,
-            Source = "gallow_concept.png",
-        };
+        List<ImageSource> imageSources = ImagesLoader.LoadFromFolder(path);
 
-        return gallowsImage;
+        List<Image> images = new List<Image>();
+
+        foreach (var imageSource in imageSources)
+        {
+            var image = new Image
+            {
+                Source = imageSource
+            };
+
+            images.Add(image);
+        }
+
+        for (int i = 0; i < images.Count; i++)
+        {
+            images[i].IsVisible = false;
+        }
+        return images;
+
     }
 
+    private void ChooseFplderPath()
+    {
+        if (hiddenWord.Length < 6)
+        {
+             folderPath = @"C:\Users\egor\Desktop\practice\gallows-game-maui\GallowsGame\GallowsGame\Resources\Images\5_letters";
+        }
+        else folderPath = @"C:\Users\egor\Desktop\practice\gallows-game-maui\GallowsGame\GallowsGame\Resources\Images\" + hiddenWord.Length.ToString() + "_letters";
+
+    }
     public FlexLayout CreateCenterLayout()
     {
-        var gallowsImage = CreateGallowsImageLayout();
-        FlexLayout.SetBasis(gallowsImage, new FlexBasis(1f, true));
+        ChooseFplderPath();
 
-        var leftCenterBox = new Grid()
+        gallowsImages = CreateGallowsImagesLayout(folderPath);
+
+        foreach (var gallowsImage in gallowsImages)
         {
-            Children = { gallowsImage },
-        };
+            FlexLayout.SetBasis(gallowsImage, new FlexBasis(1f, true));
+        }
+
+        var leftCenterBox = new Grid();
+
+        foreach (var gallowsImage in gallowsImages)
+        {
+            leftCenterBox.Children.Add(gallowsImage);
+        }
 
         var keyboardLayOut = CreateKeyBoardLayout(700);
-        FlexLayout.SetBasis(gallowsImage, new FlexBasis(1f, true));
 
         var cluePriceLabel = new Label()
         {
@@ -294,7 +325,8 @@ public partial class GamePage : ContentPage
         {
             currentAttempts++;
             image.Source = "wrong_letter.png";
-            gallowsImage.Source = "round.png";
+            gallowsImages[currentIndex].IsVisible = true;
+            currentIndex++;
         }
 
         DetermineOutcomeOfRound();
