@@ -63,13 +63,14 @@
 	  <None Remove="Resources\Images\firstbttn.png" />
 	  <None Remove="Resources\Images\firstPageBg.png" />
 	  <None Remove="Resources\Images\gallow_concept.png" />
+	  <None Remove="Resources\Images\lose_summary_bg.png" />
 	  <None Remove="Resources\Images\ok_bttn.png" />
 	  <None Remove="Resources\Images\round.png" />
 	  <None Remove="Resources\Images\rule_bg.png" />
 	  <None Remove="Resources\Images\secondbttn.png" />
 	  <None Remove="Resources\Images\stick.png" />
-	  <None Remove="Resources\Images\summary_bg.png" />
 	  <None Remove="Resources\Images\thirdbttn.png" />
+	  <None Remove="Resources\Images\win_summary_bg.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -79,13 +80,19 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Pages\SummaryRoundPage.xaml.cs">
-	    <DependentUpon>SummaryRoundPage.xaml</DependentUpon>
+	  <Compile Update="ModalWindows\WinRoundWindow.xaml.cs">
+	    <DependentUpon>WinRoundWindow.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
 	  <MauiXaml Update="ModalWindows\CustomErrorDialog.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="ModalWindows\LoseRoundWindow.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="ModalWindows\WinRoundWindow.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\EnterWordPage.xaml">
@@ -98,9 +105,6 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\MenuPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Pages\SummaryRoundPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
