@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35013.160
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GallowsGame", "GallowsGame\GallowsGame.csproj", "{E13A5540-7068-458E-A70A-1FE7F29E3B0B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GallowsGame", "GallowsGame\GallowsGame.csproj", "{E13A5540-7068-458E-A70A-1FE7F29E3B0B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GallowsGameTests", "GallowsGameTests\GallowsGameTests.csproj", "{FE34B6DB-34CF-495B-BC54-987ACE14987C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,6 +19,10 @@ Global
 		{E13A5540-7068-458E-A70A-1FE7F29E3B0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E13A5540-7068-458E-A70A-1FE7F29E3B0B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E13A5540-7068-458E-A70A-1FE7F29E3B0B}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{FE34B6DB-34CF-495B-BC54-987ACE14987C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE34B6DB-34CF-495B-BC54-987ACE14987C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE34B6DB-34CF-495B-BC54-987ACE14987C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE34B6DB-34CF-495B-BC54-987ACE14987C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

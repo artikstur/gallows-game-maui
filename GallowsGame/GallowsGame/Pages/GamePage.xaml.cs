@@ -242,18 +242,22 @@ public partial class GamePage : ContentPage
         button.IsEnabled = false;
         button.IsEnabled = false;
         button.Background = Colors.Transparent;
-        button.TextColor = Colors.Black; 
+        button.TextColor = Colors.Black;
 
-        if (hiddenWord.Contains(button.Text))
+        GuessLetter(button.Text, image);
+    }
+    private void GuessLetter(string buttonText, Image image)
+    {
+        if (hiddenWord.Contains(buttonText))
         {
             image.Source = "right_letter.png";
 
             StringBuilder sb = new StringBuilder(currentOpenedWord);
             int index = -1;
 
-            while ((index = hiddenWord.IndexOf(button.Text, index + 1)) != -1)
+            while ((index = hiddenWord.IndexOf(buttonText, index + 1)) != -1)
             {
-                sb[index] = button.Text[0];
+                sb[index] = buttonText[0];
             }
 
             currentOpenedWord = sb.ToString();
