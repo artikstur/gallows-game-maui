@@ -1,7 +1,4 @@
-﻿using Microsoft.Maui.Controls;
-
-
-namespace GallowsGame
+﻿namespace GallowsGame
 {
     public partial class CustomErrorDialog: ContentPage
     {

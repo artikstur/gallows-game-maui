@@ -68,6 +68,7 @@
 	  <None Remove="Resources\Images\rule_bg.png" />
 	  <None Remove="Resources\Images\secondbttn.png" />
 	  <None Remove="Resources\Images\stick.png" />
+	  <None Remove="Resources\Images\summary_bg.png" />
 	  <None Remove="Resources\Images\thirdbttn.png" />
 	</ItemGroup>
 
@@ -75,6 +76,12 @@
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="Pages\SummaryRoundPage.xaml.cs">
+	    <DependentUpon>SummaryRoundPage.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -91,6 +98,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\MenuPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\SummaryRoundPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

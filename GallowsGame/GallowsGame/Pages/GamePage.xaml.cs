@@ -1,7 +1,5 @@
 using GallowsGame.Utils;
 using Microsoft.Maui.Layouts;
-using System;
-using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace GallowsGame.Pages;
@@ -12,6 +10,7 @@ public partial class GamePage : ContentPage
     private string hiddenWord;
     private string currentOpenedWord; //отгаданное на данный момент слово
     private Label currentWord;
+    private Image gallowsImage;
     public GamePage(string userText)
     {
         this.currentOpenedWord = new string('_', userText.Length);
@@ -99,7 +98,7 @@ public partial class GamePage : ContentPage
 
     public Image CreateGallowsImageLayout()
     {
-        var gallowsImage = new Image()
+        gallowsImage = new Image()
         {
             Margin = 30,
             Source = "gallow_concept.png",
@@ -226,13 +225,12 @@ public partial class GamePage : ContentPage
     }
     
 
-    public void OnKeyboardButtonClicked(object sender, EventArgs e)
+    public async void OnKeyboardButtonClicked(object sender, EventArgs e)
     {
         Button button = (Button)sender;
         Grid parentGrid = (Grid)button.Parent;
         Image image = parentGrid.Children.OfType<Image>().FirstOrDefault();
 
-        button.IsEnabled = false;
         button.IsEnabled = false;
         button.Background = Colors.Transparent;
         button.TextColor = Colors.Black; 
@@ -255,6 +253,7 @@ public partial class GamePage : ContentPage
         else
         {
             image.Source = "wrong_letter.png";
+            gallowsImage.Source = "round.png";
         }
     }
 
