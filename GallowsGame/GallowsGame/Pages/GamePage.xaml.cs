@@ -191,9 +191,13 @@ public partial class GamePage : ContentPage
             }
         };
     }
-    public void OnPauseButtonClicked(object sender, EventArgs e)
+    public async void OnPauseButtonClicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new MenuPage());
+        ImageButton button = (ImageButton) sender;
+        await button.ScaleTo(1.2, 100, Easing.Linear);
+        await button.ScaleTo(1, 100, Easing.Linear);
+
+        await Navigation.PushAsync(new MenuPage());
     }
 
     private StackLayout CreateKeyBoardLayout(int boxSize)
@@ -228,23 +232,30 @@ public partial class GamePage : ContentPage
     public async void OnKeyboardButtonClicked(object sender, EventArgs e)
     {
         Button button = (Button)sender;
+        await button.ScaleTo(1.2, 100, Easing.Linear);
+        await button.ScaleTo(1, 100, Easing.Linear);
+
         Grid parentGrid = (Grid)button.Parent;
         Image image = parentGrid.Children.OfType<Image>().FirstOrDefault();
 
         button.IsEnabled = false;
         button.Background = Colors.Transparent;
-        button.TextColor = Colors.Black; 
+        button.TextColor = Colors.Black;
 
-        if (hiddenWord.Contains(button.Text))
+        GuessLetter(button.Text, image);
+    }
+    private void GuessLetter(string buttonText, Image image)
+    {
+        if (hiddenWord.Contains(buttonText))
         {
             image.Source = "right_letter.png";
 
             StringBuilder sb = new StringBuilder(currentOpenedWord);
             int index = -1;
 
-            while ((index = hiddenWord.IndexOf(button.Text, index + 1)) != -1)
+            while ((index = hiddenWord.IndexOf(buttonText, index + 1)) != -1)
             {
-                sb[index] = button.Text[0];
+                sb[index] = buttonText[0];
             }
 
             currentOpenedWord = sb.ToString();
@@ -260,5 +271,6 @@ public partial class GamePage : ContentPage
     public void OnClearButtonClicked(object sender, EventArgs e)
     {
         Button button = (Button)sender;
+        
     }
 }
