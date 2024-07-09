@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="GallowsGame.Pages.SidePeekPage"
+             Title="SidePeekPage"
+             BackgroundImageSource = "background.png">
+
+    <VerticalStackLayout Padding="10">
+
+        <Label Text="Раунд 1"
+               HorizontalOptions="Center"
+               FontSize="45"
+               FontFamily="Maki-Sans"
+               TextColor="Red"
+               Margin="0,20,0,20"/>
+
+        <Grid ColumnDefinitions="*,*"
+              RowDefinitions="Auto,Auto,Auto,Auto">
+
+            <Image Source="stalin.png"
+                   Grid.Row="0"
+                   Grid.Column="0"
+                   Aspect="AspectFit"
+                   HeightRequest="450"
+                   WidthRequest="380"/>
+
+            <Image Source="lenin.png"
+                   Grid.Row="0"
+                   Grid.Column="1"
+                   Aspect="AspectFit"
+                    HeightRequest="450"
+                   WidthRequest="380"/>
+
+            <Label Text="Загадывает:"
+                   HorizontalOptions="Center"
+                   FontSize="40"
+                   FontFamily="Maki-Sans"
+                   TextColor="Red"
+                   Grid.Row="1"
+                   Grid.Column="0"
+                   Margin="0,28,28,0"/>
+
+            <Label Text="Отгадывает:"
+                   HorizontalOptions="Center"
+                   FontSize="40"
+                   FontFamily="Maki-Sans"
+                   TextColor="Red"
+                   Grid.Row="1"
+                   Grid.Column="1"
+                   Margin="0,28,28,0"/>
+
+
+            <Entry Placeholder="Игрок 1"
+                   x:Name="firstNameEntry"
+                   HorizontalOptions="Center"
+                   FontSize="26"
+                   Text=""
+                   TextColor="Gray"
+                   FontFamily="Maki-Sans"
+                   WidthRequest="300"
+                   Grid.Row="2"
+                   Grid.Column="0"
+                   HorizontalTextAlignment="Center"
+                   VerticalTextAlignment="Center"
+                   Margin="0,30,30,0"/>
+
+            <Entry Placeholder="Игрок 2"
+                   x:Name="secondNameEntry"
+                    HorizontalOptions="Center"
+                    FontSize="26"
+                    Text= ""
+                    TextColor="Gray"
+                    FontFamily="Maki-Sans"
+                    WidthRequest="300"
+                    Grid.Row="2"
+                    HorizontalTextAlignment="Center"
+                    VerticalTextAlignment="Center"
+                    Grid.Column="1"
+                    Margin="0,30,30,0"/>
+
+            <Button Text="Начать"
+                    Grid.Row="3"
+                    FontSize="40"
+                    FontFamily="Maki-Sans"
+                    TextColor="Navy"
+                    BackgroundColor="Transparent"
+                    Grid.ColumnSpan ="2"
+                    Clicked="OnChooseNamesButton"
+                    WidthRequest="250"
+                    HeightRequest="75"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    Margin="0,-585,0,0"/>
+        </Grid>
+    </VerticalStackLayout>
+</ContentPage>

@@ -128,9 +128,12 @@ public partial class GamePage : ContentPage
     {
         if (hiddenWord.Length < 6)
         {
-             folderPath = @"C:\Users\egor\Desktop\practice\gallows-game-maui\GallowsGame\GallowsGame\Resources\Images\5_letters";
+             folderPath = @"C:\Users\egor\Desktop\practice\gallows-game-maui\GallowsGame\GallowsGame\Resources\Images\10_attempts";
         }
-        else folderPath = @"C:\Users\egor\Desktop\practice\gallows-game-maui\GallowsGame\GallowsGame\Resources\Images\" + hiddenWord.Length.ToString() + "_letters";
+        else if (hiddenWord.Length == 6)
+            folderPath = @"C:\Users\egor\Desktop\practice\gallows-game-maui\GallowsGame\GallowsGame\Resources\Images\12_attempts";
+
+        else folderPath = @"C:\Users\egor\Desktop\practice\gallows-game-maui\GallowsGame\GallowsGame\Resources\Images\14_attempts";
 
     }
     public FlexLayout CreateCenterLayout()
@@ -275,16 +278,16 @@ public partial class GamePage : ContentPage
         button.Background = Colors.Transparent;
         button.TextColor = Colors.Black;
 
-        GuessLetter(button.Text, image);
+        await GuessLetter(button.Text, image);
     }
 
     public void CountAttempts()
     {
         if (hiddenWord.Length < 6)
-        {
-            attempts = 5;
-        }
-        else attempts = hiddenWord.Length;
+            attempts = 10;
+        else if (hiddenWord.Length == 6)
+            attempts = 12;
+        else attempts = 14;
     }
 
     public void DetermineOutcomeOfRound()
@@ -293,7 +296,6 @@ public partial class GamePage : ContentPage
         if (hiddenWord == currentOpenedWord)
         {
             ShowResult(new WinRoundWindow());
-            hiddenWord = "";
         }
         else if (currentAttempts >= attempts)
         {
@@ -301,7 +303,7 @@ public partial class GamePage : ContentPage
         }
     }
 
-    private void GuessLetter(string buttonText, Image image)
+    private async Task GuessLetter(string buttonText, Image image)
     {
 
         CountAttempts();
@@ -317,16 +319,32 @@ public partial class GamePage : ContentPage
             {
                 sb[index] = buttonText[0];
             }
-
             currentOpenedWord = sb.ToString();
             currentWord.Text = currentOpenedWord;
+
+            if (currentIndex != 0)
+            {
+                currentIndex--;
+                currentAttempts--;
+            }
+
+            gallowsImages[currentIndex].IsVisible = false;
+
         }
         else
         {
-            currentAttempts++;
+            currentAttempts+=2;
             image.Source = "wrong_letter.png";
             gallowsImages[currentIndex].IsVisible = true;
             currentIndex++;
+            if (currentIndex != attempts)
+            {
+                await Task.Delay(550);
+                gallowsImages[currentIndex].IsVisible = true;
+                currentIndex++;
+            }
+           
+
         }
 
         DetermineOutcomeOfRound();
@@ -334,7 +352,7 @@ public partial class GamePage : ContentPage
 
 
 
-    public static void ShowResult(Page window) // тут короч интерфейс нельзя сделать общий, потому что метод Push только тип Page принимает
+    public static void ShowResult(Page window)
     {
         Application.Current.MainPage.Navigation.PushModalAsync(window);
     }

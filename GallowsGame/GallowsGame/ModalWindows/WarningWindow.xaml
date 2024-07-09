@@ -1,0 +1,55 @@
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="GallowsGame.WarningWindow"
+             BackgroundColor="Transparent"
+            >
+
+    <ContentPage.Content>
+        <Grid VerticalOptions="CenterAndExpand"
+              HorizontalOptions="CenterAndExpand"
+              WidthRequest="410"
+              HeightRequest="450">
+            <Image
+                    WidthRequest="900"
+                    HeightRequest="700"
+                    Source="stick2.png">
+            </Image>
+
+            <Label x:Name="ErrorMessage"
+                     FontSize="26"
+                     FontFamily="MP Manga Font"
+                     HorizontalOptions="Center"
+                     VerticalOptions="Center"
+                     Opacity="0.9"
+                     Margin="0,0,10,40"
+                     HorizontalTextAlignment="Center"
+                     TextColor="Black"/>
+            <Button
+                  Text="Oставить"
+                  Background="Transparent"
+                   WidthRequest="180"
+                  HeightRequest="70"
+                  TextColor="Red"
+                  FontSize ="25"
+                  FontFamily="MP Manga Font"
+                  Clicked="OnKeepNamesCkicked"
+                  HorizontalOptions="Start"
+                  VerticalOptions="End"
+                  Margin="5,0,0,60"/>
+            <Button
+                  Text="Изменить"
+                  Background="Transparent"
+                  WidthRequest="180"
+                  HeightRequest="70"
+                  TextColor="Red"
+                  FontSize ="25"
+                  FontFamily="MP Manga Font"
+                  Clicked="OnChangeNamesClicked"
+                HorizontalOptions="End"
+                VerticalOptions="End"
+                 Margin="0,0,25,60"/>
+
+
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

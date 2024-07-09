@@ -20,10 +20,14 @@ namespace GallowsGame
             await Navigation.PopModalAsync();
         }
 
+
         public async void OnOkButtonClicked(object sender, EventArgs e)
         {
-            await Navigation.PushModalAsync(new EnterWordPage());
+
+            await Navigation.PopModalAsync();
+            await Shell.Current.GoToAsync(nameof(EnterWordPage));
         }
+
     }
 }
 
