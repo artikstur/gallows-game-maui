@@ -15,13 +15,27 @@ public partial class GamePage : ContentPage
     private int currentAttempts;
     private int currentIndex = 0;
     private string folderPath;
+    private string _currentPlayer;
     public GamePage(string userText)
     {
         this.currentOpenedWord = new string('_', userText.Length);
         this.hiddenWord = userText;
 
         InitializeComponent();
+        ChooseCurrentPlayer(UserDataStorage.AllRoundsCount);
         CreateLayout();
+    }
+
+    public void ChooseCurrentPlayer(int number)
+    {
+        if (number % 2 != 0)
+        {
+            _currentPlayer = UserDataStorage.FirstPlayer.Name;
+        }
+        else
+        {
+            _currentPlayer = UserDataStorage.SecondPlayer.Name;
+        }
     }
 
     public FlexLayout CreateTopBarLayout()
@@ -52,8 +66,18 @@ public partial class GamePage : ContentPage
             FontFamily = "Maki-Sans",
             Margin = new Thickness(0, 11, 0, 0),
             HorizontalOptions = LayoutOptions.Center,
-            Text = "Слово:",
-            FontSize = 30,
+            Text = $"{_currentPlayer}",
+            FontSize = 40,
+            TextColor = Colors.Navy
+        };
+
+        var currentScores = new Label()
+        {
+            FontFamily = "Maki-Sans",
+            Margin = new Thickness(0, 11, 0, 0),
+            HorizontalOptions = LayoutOptions.Center,
+            Text = $"{UserDataStorage.FirstPlayer.WinRoundCount} : {UserDataStorage.SecondPlayer.WinRoundCount}",
+            FontSize = 50,
             TextColor = Colors.Navy
         };
 
@@ -69,7 +93,7 @@ public partial class GamePage : ContentPage
 
         var leftBarCenterBox = new VerticalStackLayout()
         {
-            Children = { currentWordClue, currentWord }
+            Children = { currentWordClue, currentWord, currentScores }
         };
 
         var pauseBtn = new ImageButton()
@@ -93,7 +117,7 @@ public partial class GamePage : ContentPage
             Children = { coinBox, leftBarCenterBox, pauseBtn },
             JustifyContent = FlexJustify.SpaceBetween,
             Direction = FlexDirection.Row,
-            HeightRequest = 150,
+            HeightRequest = 200,
             HorizontalOptions = LayoutOptions.FillAndExpand,
         };
 
@@ -280,7 +304,7 @@ public partial class GamePage : ContentPage
         Grid parentGrid = (Grid)button.Parent;
         Image image = parentGrid.Children.OfType<Image>().FirstOrDefault();
 
-       
+
 
         await GuessLetter(button.Text, image);
     }
@@ -300,16 +324,49 @@ public partial class GamePage : ContentPage
         if (hiddenWord == currentOpenedWord)
         {
             ShowResult(new WinRoundWindow());
+            AddWinnerPoint();
+
+            CheckForEnd();
         }
         else if (currentAttempts >= attempts)
         {
             ShowResult(new LoseRoundWindow());
+
+            CheckForEnd();
+        }
+
+    }
+
+    private async void CheckForEnd()
+    {
+        if (UserDataStorage.AllRoundsCount >= 10 || UserDataStorage.FirstPlayer.WinRoundCount == 2 || UserDataStorage.SecondPlayer.WinRoundCount == 2)
+        {
+            UserDataStorage.AllRoundsCount = 0;
+
+            int firstPlayerWinCount = UserDataStorage.FirstPlayer.WinRoundCount; // сколько выйграл первый
+            int secondPlayerWinCount = UserDataStorage.SecondPlayer.WinRoundCount; //сколько выйграл второй
+
+            // вызов окна результатов тут должен быть
+
+            // обнуляем
+            UserDataStorage.FirstPlayer.WinRoundCount = 0;
+            UserDataStorage.SecondPlayer.WinRoundCount = 0;
         }
     }
 
+    public void AddWinnerPoint()
+    {
+        if (UserDataStorage.AllRoundsCount % 2 != 0)
+        {
+            UserDataStorage.FirstPlayer.WinRoundCount += 1;
+        }
+        else
+        {
+            UserDataStorage.SecondPlayer.WinRoundCount += 1;
+        }
+    }
     private async Task GuessLetter(string buttonText, Image image)
     {
-
         CountAttempts();
 
         if (hiddenWord.Contains(buttonText))
@@ -343,7 +400,7 @@ public partial class GamePage : ContentPage
             currentIndex++;
             if (currentIndex != attempts)
             {
-                await Task.Delay(550);
+                //await Task.Delay(550);
                 gallowsImages[currentIndex].IsVisible = true;
                 currentIndex++;
             }

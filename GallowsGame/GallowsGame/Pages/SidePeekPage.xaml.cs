@@ -1,5 +1,6 @@
 ﻿
 using GallowsGame.Utils;
+using GallowsGame.Utils.UserData;
 namespace GallowsGame.Pages
 {
     public partial class SidePeekPage : ContentPage
@@ -11,17 +12,20 @@ namespace GallowsGame.Pages
 
         private async void OnChooseNamesButton(object sender, EventArgs e)
         {
-            UserDataStorage.firstPlayerName = firstNameEntry.Text;
-            UserDataStorage.secondPlayerName = secondNameEntry.Text;
+            var firstPlayer = new PersonData(firstNameEntry.Text);
+            var secondPlayer = new PersonData(firstNameEntry.Text);
 
-            if (UserDataStorage.firstPlayerName == "" || UserDataStorage.secondPlayerName == "")
+            UserDataStorage.FirstPlayer = firstPlayer;
+            UserDataStorage.SecondPlayer = secondPlayer;
+
+            if (firstNameEntry.Text == "" || firstNameEntry.Text == "")
             {
-               WarningWindow warning = new WarningWindow("Впишите свои имена в поля ниже, иначе будут выбраны базовые названия");
+                WarningWindow warning = new WarningWindow("Впишите свои имена в поля ниже, иначе будут выбраны базовые названия");
                 await Navigation.PushModalAsync(warning);
             }
             else
             {
-                await Navigation.PushAsync(new EnterWordPage()); 
+                await Navigation.PushAsync(new EnterWordPage());
             }
         }
 

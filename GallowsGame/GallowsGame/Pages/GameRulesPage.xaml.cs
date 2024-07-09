@@ -13,7 +13,6 @@ namespace GallowsGame.Pages
             InitializeComponent();
         }
 
-
         public async void OnBackToMainPageBttnClicked(object sender, EventArgs e)
         {
             ImageButton button = (ImageButton)sender;

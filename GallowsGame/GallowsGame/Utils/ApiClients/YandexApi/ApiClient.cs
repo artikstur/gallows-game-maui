@@ -10,7 +10,7 @@ namespace GallowsGame.Utils.ApiClients.YandexApi
     internal class ApiClient
     {
         private readonly HttpClient _httpClient;
-        private const string ApiKey = "";
+        private const string ApiKey = "dict.1.1.20240705T113857Z.4e981222048a8af7.3220deea9bd96b0b061542067ceede54abac45a6";
         private const string _baseUrl = "https://dictionary.yandex.net/api/v1/dicservice.json/lookup";
 
         public ApiClient()

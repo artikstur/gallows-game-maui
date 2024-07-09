@@ -16,13 +16,36 @@ public partial class EnterWordPage : ContentPage
         HorizontalOptions = LayoutOptions.Center
     };
     private string userText  = "";
+    private int _round;
+    private string _currentPlayer;
 
     public EnterWordPage()
     {
+        //UserDataStorage.AllRoundsCount += 1;
+        //_round = UserDataStorage.AllRoundsCount;
+        ChangeRoundCount();
         InitializeComponent();
         CreateLayout();
     }
 
+    public void ChangeRoundCount()
+    {
+        ChooseCurrentPlayer(UserDataStorage.AllRoundsCount);
+        UserDataStorage.AllRoundsCount += 1;
+        _round = UserDataStorage.AllRoundsCount;
+    }
+
+    public void ChooseCurrentPlayer(int number)
+    {
+        if (number % 2 == 0)
+        {
+            _currentPlayer = UserDataStorage.FirstPlayer.Name;
+        }
+        else
+        {
+            _currentPlayer = UserDataStorage.SecondPlayer.Name;
+        }
+    }
     public void CreateLayout()
     {
         var topBox = CreateTopLayout();
@@ -89,7 +112,7 @@ public partial class EnterWordPage : ContentPage
     {
         Label titleLabel = new Label()
         {
-            Text = "Раунд 1",
+            Text = $"Раунд {_round}",
             TextColor = Colors.Red,
             FontSize = 48,
             FontFamily = "Maki-Sans",
@@ -134,7 +157,7 @@ public partial class EnterWordPage : ContentPage
     {
         Label enterWordLabel = new Label()
         {
-            Text = "Введите слово",
+            Text = $"{_currentPlayer}, введите слово",
             TextColor = Colors.Navy,
             FontSize = 45,
             FontFamily = "Maki-Sans",

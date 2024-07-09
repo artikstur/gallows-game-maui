@@ -1,5 +1,6 @@
 ﻿using GallowsGame.Pages;
 using GallowsGame.Utils;
+using GallowsGame.Utils.UserData;
 using Microsoft.Maui.Controls;
 
 namespace GallowsGame
@@ -24,8 +25,12 @@ namespace GallowsGame
 
         private async void OnKeepNamesCkicked(object sender, EventArgs e)
         {
-            UserDataStorage.firstPlayerName = "Игрок 1";
-            UserDataStorage.secondPlayerName = "Игрок 2";
+            var firstPlayer = new PersonData("Игрок 1");
+            var secondPlayer = new PersonData("Игрок 2");
+
+            UserDataStorage.FirstPlayer = firstPlayer;
+            UserDataStorage.SecondPlayer = secondPlayer;
+
             await Navigation.PopModalAsync();
             await Shell.Current.GoToAsync(nameof(EnterWordPage));
         }

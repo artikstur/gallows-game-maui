@@ -1,10 +1,12 @@
 ﻿
+using GallowsGame.Utils.UserData;
+
 namespace GallowsGame.Utils
 { 
-    internal static class UserDataStorage
+    public static class UserDataStorage
     {
-        public static string firstPlayerName = "";
-        public static string secondPlayerName = "";
+        public static PersonData? FirstPlayer { get; set; }
+        public static PersonData? SecondPlayer { get; set; }
+        public static int AllRoundsCount { get; set; } = 0;
     }
-
 }
