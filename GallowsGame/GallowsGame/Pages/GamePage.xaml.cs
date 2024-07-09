@@ -124,21 +124,22 @@ public partial class GamePage : ContentPage
 
     }
 
-    private void ChooseFplderPath()
+    private void ChooseFolderPath()
     {
         if (hiddenWord.Length < 6)
         {
-             folderPath = @"C:\Users\egor\Desktop\practice\gallows-game-maui\GallowsGame\GallowsGame\Resources\Images\10_attempts";
+            folderPath = PathMaker.GetFolderPath("10_attempts");
         }
         else if (hiddenWord.Length == 6)
-            folderPath = @"C:\Users\egor\Desktop\practice\gallows-game-maui\GallowsGame\GallowsGame\Resources\Images\12_attempts";
+            folderPath = PathMaker.GetFolderPath("12_attempts");
 
-        else folderPath = @"C:\Users\egor\Desktop\practice\gallows-game-maui\GallowsGame\GallowsGame\Resources\Images\14_attempts";
+        else folderPath = PathMaker.GetFolderPath("14_attempts");
 
     }
+
     public FlexLayout CreateCenterLayout()
     {
-        ChooseFplderPath();
+        ChooseFolderPath();
 
         gallowsImages = CreateGallowsImagesLayout(folderPath);
 
@@ -268,15 +269,18 @@ public partial class GamePage : ContentPage
     public async void OnKeyboardButtonClicked(object sender, EventArgs e)
     {
         Button button = (Button)sender;
+
+        button.IsEnabled = false;
+        button.Background = Colors.Transparent;
+        button.TextColor = Colors.Black;
+
         await button.ScaleTo(1.2, 100, Easing.Linear);
         await button.ScaleTo(1, 100, Easing.Linear);
 
         Grid parentGrid = (Grid)button.Parent;
         Image image = parentGrid.Children.OfType<Image>().FirstOrDefault();
 
-        button.IsEnabled = false;
-        button.Background = Colors.Transparent;
-        button.TextColor = Colors.Black;
+       
 
         await GuessLetter(button.Text, image);
     }
@@ -343,8 +347,6 @@ public partial class GamePage : ContentPage
                 gallowsImages[currentIndex].IsVisible = true;
                 currentIndex++;
             }
-           
-
         }
 
         DetermineOutcomeOfRound();

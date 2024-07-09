@@ -1,7 +1,6 @@
 using GallowsGame.Utils;
 using GallowsGame.Utils.ApiClients.YandexApi;
 using Microsoft.Maui.Layouts;
-using System.Runtime.CompilerServices;
 
 namespace GallowsGame.Pages;
 
@@ -16,7 +15,6 @@ public partial class EnterWordPage : ContentPage
         VerticalOptions = LayoutOptions.Center,
         HorizontalOptions = LayoutOptions.Center
     };
-
     private string userText  = "";
 
     public EnterWordPage()
@@ -34,7 +32,7 @@ public partial class EnterWordPage : ContentPage
 
         StackLayout grid = new StackLayout
         {
-            Children = { topBox, clueBox, enterWordBox, keyboardBox},
+            Children = { topBox, clueBox, enterWordBox, keyboardBox },
             VerticalOptions = LayoutOptions.FillAndExpand,
             HorizontalOptions = LayoutOptions.FillAndExpand,
         };

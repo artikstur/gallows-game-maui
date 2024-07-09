@@ -1,4 +1,5 @@
 ﻿using GallowsGame.Pages;
+using Microsoft.Maui.Controls;
 
 namespace GallowsGame
 {
@@ -25,9 +26,11 @@ namespace GallowsGame
         {
 
             await Navigation.PopModalAsync();
+
             await Shell.Current.GoToAsync(nameof(EnterWordPage));
         }
+    }
 
     }
-}
+
 
