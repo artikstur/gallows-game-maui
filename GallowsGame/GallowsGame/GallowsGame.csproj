@@ -65,11 +65,12 @@
 	  <None Remove="Resources\Images\gallow_concept.png" />
 	  <None Remove="Resources\Images\lenin.png" />
 	  <None Remove="Resources\Images\lose_summary_bg.png" />
+	  <None Remove="Resources\Images\new_training.png" />
 	  <None Remove="Resources\Images\ok_bttn.png" />
 	  <None Remove="Resources\Images\pausebttn.png" />
 	  <None Remove="Resources\Images\round.png" />
-	  <None Remove="Resources\Images\rule_bg.png" />
 	  <None Remove="Resources\Images\secondbttn.png" />
+	  <None Remove="Resources\Images\side_peek_bg.png" />
 	  <None Remove="Resources\Images\stalin.png" />
 	  <None Remove="Resources\Images\stick.png" />
 	  <None Remove="Resources\Images\stick2.png" />

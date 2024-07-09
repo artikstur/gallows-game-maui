@@ -405,7 +405,6 @@ public partial class GamePage : ContentPage
                 currentIndex++;
             }
         }
-
         DetermineOutcomeOfRound();
     }
 

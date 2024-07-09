@@ -29,6 +29,14 @@ namespace GallowsGame.Pages
             }
         }
 
+        private async void OnPauseButtonClicked(object sender, EventArgs e)
+        {
+            ImageButton button = (ImageButton)sender;
+            await button.ScaleTo(1.2, 100, Easing.Linear);
+            await button.ScaleTo(1, 100, Easing.Linear);
+
+            await Navigation.PushAsync(new MenuPage());
+        }
     }
 
 }

@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="GallowsGame.Pages.SidePeekPage"
              Title="SidePeekPage"
-             BackgroundImageSource = "background.png">
+             BackgroundImageSource = "side_peek_bg.png">
 
     <VerticalStackLayout Padding="10">
 
@@ -12,7 +12,7 @@
                FontSize="45"
                FontFamily="Maki-Sans"
                TextColor="Red"
-               Margin="0,20,0,20"/>
+               Margin="0,10,40,20"/>
 
         <Grid ColumnDefinitions="*,*"
               RowDefinitions="Auto,Auto,Auto,Auto">
@@ -38,7 +38,19 @@
                    TextColor="Red"
                    Grid.Row="1"
                    Grid.Column="0"
-                   Margin="0,28,28,0"/>
+                   Margin="0,28,48,0"/>
+
+            <ImageButton 
+                  Grid.Row="3"
+                  Source="pausebttn.png"
+                  Grid.ColumnSpan ="2"
+                  Clicked="OnPauseButtonClicked"
+                  WidthRequest="80"
+                  HeightRequest="80"
+                  HorizontalOptions="End"
+                  VerticalOptions="Start"
+                  Margin="0,-685,20,0"/> 
+
 
             <Label Text="Отгадывает:"
                    HorizontalOptions="Center"
@@ -52,37 +64,55 @@
 
             <Entry Placeholder="Игрок 1"
                    x:Name="firstNameEntry"
+                   PlaceholderColor="#90313380"
                    HorizontalOptions="Center"
-                   FontSize="26"
+                   TextColor="Navy" 
+                   BackgroundColor="#20313380"
+                   FontSize="34"
                    Text=""
-                   TextColor="Gray"
                    FontFamily="Maki-Sans"
-                   WidthRequest="300"
+                   HeightRequest="65"
+                   WidthRequest="318"
                    Grid.Row="2"
                    Grid.Column="0"
                    HorizontalTextAlignment="Center"
                    VerticalTextAlignment="Center"
-                   Margin="0,30,30,0"/>
+                   Margin="0,30,44,0">
+                <Entry.Triggers>
+                    <Trigger TargetType="Entry" Property="IsFocused" Value="False">
+                        <Setter Property="PlaceholderColor" Value="#90313380"/>
+                    </Trigger>
+                </Entry.Triggers>
+                 </Entry>
 
-            <Entry Placeholder="Игрок 2"
-                   x:Name="secondNameEntry"
-                    HorizontalOptions="Center"
-                    FontSize="26"
-                    Text= ""
-                    TextColor="Gray"
-                    FontFamily="Maki-Sans"
-                    WidthRequest="300"
-                    Grid.Row="2"
-                    HorizontalTextAlignment="Center"
-                    VerticalTextAlignment="Center"
-                    Grid.Column="1"
-                    Margin="0,30,30,0"/>
+            <Entry x:Name="secondNameEntry"
+                   Placeholder="Игрок 2"
+                   HorizontalOptions="Center"
+                   FontSize="34"
+                   BackgroundColor="#20313380"
+                   TextColor="Navy" 
+                   FontFamily="Maki-Sans"
+                   WidthRequest="318"
+                   HeightRequest="65"
+                   Grid.Row="2"
+                   HorizontalTextAlignment="Center"
+                   VerticalTextAlignment="Center"
+                   Grid.Column="1"
+                   Margin="0,30,28,0"
+                   PlaceholderColor="#90313380">
+                <Entry.Triggers>
+                    <Trigger TargetType="Entry" Property="IsFocused" Value="False">
+                        <Setter Property="PlaceholderColor" Value="#90313380"/>
+                    </Trigger>
+                </Entry.Triggers>
+            </Entry>
 
-            <Button Text="Начать"
+            <Button Text="Начать игру"
                     Grid.Row="3"
-                    FontSize="40"
+                    FontSize="50"
                     FontFamily="Maki-Sans"
                     TextColor="Navy"
+                    
                     BackgroundColor="Transparent"
                     Grid.ColumnSpan ="2"
                     Clicked="OnChooseNamesButton"
@@ -90,7 +120,7 @@
                     HeightRequest="75"
                     HorizontalOptions="Center"
                     VerticalOptions="Center"
-                    Margin="0,-585,0,0"/>
+                    Margin="0,-510,50,0"/>
         </Grid>
     </VerticalStackLayout>
 </ContentPage>
