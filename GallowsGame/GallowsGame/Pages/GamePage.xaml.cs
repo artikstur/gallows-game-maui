@@ -18,6 +18,8 @@ public partial class GamePage : ContentPage
     private string _currentPlayer;
     private int _firstPlayerScores;
     private int _secondPlayerScores;
+    private string _firstPlayerName;
+    private string _secondPlayerName;
     public GamePage(string userText)
     {
         this.currentOpenedWord = new string('_', userText.Length);
@@ -25,16 +27,18 @@ public partial class GamePage : ContentPage
 
         InitializeComponent();
 
-        SetPlayersScores();
+        SetPlayersData();
         ChooseCurrentPlayer();
 
         CreateLayout();
     }
 
-    private void SetPlayersScores()
+    private void SetPlayersData()
     {
         _firstPlayerScores = UserDataStorage.FirstPlayer.WinRoundCount;
         _secondPlayerScores = UserDataStorage.SecondPlayer.WinRoundCount;
+        _firstPlayerName = UserDataStorage.FirstPlayer.Name;
+        _secondPlayerName = UserDataStorage.SecondPlayer.Name;
     }
     private void ChooseCurrentPlayer()
     {
@@ -77,21 +81,25 @@ public partial class GamePage : ContentPage
         var firstPlayerNameLabel = new Label()
         {
             FontFamily = "Maki-Sans",
-            Margin = new Thickness(0, 11, 0, 0),
+            Margin = new Thickness(0, 11, 5, 0),
             HorizontalOptions = LayoutOptions.Center,
-            Text = $"{UserDataStorage.FirstPlayer.Name}",
-            FontSize = 40,
-            TextColor = Colors.Navy
+            Text = $"{_firstPlayerName}",
+            FontSize = 35,
+            TextColor = Colors.Navy,
+            WidthRequest = 300,
+            HorizontalTextAlignment = TextAlignment.End,
         };
 
         var secondPlayerNameLabel = new Label()
         {
             FontFamily = "Maki-Sans",
-            Margin = new Thickness(0, 11, 0, 0),
+            Margin = new Thickness(5, 11, 0, 0),
             HorizontalOptions = LayoutOptions.Center,
-            Text = $"{UserDataStorage.SecondPlayer.Name}",
-            FontSize = 40,
-            TextColor = Colors.Navy
+            Text = $"{_secondPlayerName}",
+            FontSize = 35,
+            TextColor = Colors.Navy,
+            WidthRequest = 300,
+            HorizontalTextAlignment = TextAlignment.Start,
         };
 
         var currentScoresLabel = new Label()
@@ -100,15 +108,15 @@ public partial class GamePage : ContentPage
             Margin = new Thickness(0, 11, 0, 0),
             HorizontalOptions = LayoutOptions.Center,
             Text = $"{_firstPlayerScores} : {_secondPlayerScores}",
-            FontSize = 40,
-            TextColor = Colors.Navy
+            FontSize = 35,
+            TextColor = Colors.Navy,
         };
         var firstPlayerIcon = new Image()
         {
             Source = "stalin_icon.png",
             WidthRequest = 50,
             HeightRequest = 50,
-            Margin = new Thickness(5, 10, 5, 0),
+            Margin = new Thickness(5, 0, 5, 0),
         };
 
         var secondPlayerIcon = new Image()
@@ -116,14 +124,19 @@ public partial class GamePage : ContentPage
             Source = "lenin_icon.png",
             WidthRequest = 50,
             HeightRequest = 50,
-            Margin = new Thickness(5, 10, 5, 0),
+            Margin = new Thickness(5, 0, 5, 0),
         };
 
-        var currentScoresBox = new FlexLayout()
+        var scoresBox = new HorizontalStackLayout()
         {
-            Children = { firstPlayerNameLabel, firstPlayerIcon, currentScoresLabel, secondPlayerIcon, secondPlayerNameLabel},
-            AlignContent = FlexAlignContent.Center,
-            Wrap = FlexWrap.Wrap,
+            Children = { firstPlayerIcon, currentScoresLabel, secondPlayerIcon },
+        };
+
+        var currentScoresBox = new HorizontalStackLayout()
+        {
+            Children = { firstPlayerNameLabel, scoresBox, secondPlayerNameLabel },
+            HorizontalOptions = LayoutOptions.Center,
+            VerticalOptions = LayoutOptions.Start,
         };
 
         currentWord = new Label()
@@ -138,7 +151,9 @@ public partial class GamePage : ContentPage
 
         var leftBarCenterBox = new VerticalStackLayout()
         {
-            Children = { currentScoresBox, currentWord}
+            Children = { currentScoresBox, currentWord},
+            HorizontalOptions = LayoutOptions.FillAndExpand,
+            VerticalOptions = LayoutOptions.Start,
         };
 
         var pauseBtn = new ImageButton()
@@ -153,9 +168,9 @@ public partial class GamePage : ContentPage
 
         pauseBtn.Clicked += OnPauseButtonClicked;
 
-        FlexLayout.SetBasis(coinBox, new FlexBasis(0.33f, true));
-        FlexLayout.SetBasis(leftBarCenterBox, new FlexBasis(0.45f, true));
-        FlexLayout.SetBasis(pauseBtn, new FlexBasis(0.33f, true));
+        FlexLayout.SetBasis(coinBox, new FlexBasis(0.10f, true));
+        FlexLayout.SetBasis(leftBarCenterBox, new FlexBasis(0.80f, true));
+        FlexLayout.SetBasis(pauseBtn, new FlexBasis(0.10f, true));
 
         var topBar = new FlexLayout()
         {

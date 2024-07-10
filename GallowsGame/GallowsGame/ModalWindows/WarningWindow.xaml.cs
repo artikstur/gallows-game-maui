@@ -23,7 +23,7 @@ namespace GallowsGame
             await Navigation.PopModalAsync();
         }
 
-        private async void OnKeepNamesCkicked(object sender, EventArgs e)
+        private async void OnKeepNamesClicked(object sender, EventArgs e)
         {
             var firstPlayer = new PersonData("Игрок 1");
             var secondPlayer = new PersonData("Игрок 2");
