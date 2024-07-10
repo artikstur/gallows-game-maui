@@ -30,11 +30,11 @@ public partial class GamePage : ContentPage
     {
         if (number % 2 != 0)
         {
-            _currentPlayer = UserDataStorage.FirstPlayer.Name;
+            _currentPlayer = UserDataStorage.SecondPlayer.Name;
         }
         else
         {
-            _currentPlayer = UserDataStorage.SecondPlayer.Name;
+            _currentPlayer = UserDataStorage.FirstPlayer.Name;
         }
     }
 
@@ -324,29 +324,33 @@ public partial class GamePage : ContentPage
         if (hiddenWord == currentOpenedWord)
         {
             ShowResult(new WinRoundWindow());
-            AddWinnerPoint();
+            AddWinnerPoint(UserDataStorage.AllRoundsCount, true);
+            UserDataStorage.AllRoundsCount += 1;
 
             CheckForEnd();
         }
         else if (currentAttempts >= attempts)
         {
             ShowResult(new LoseRoundWindow());
+            AddWinnerPoint(UserDataStorage.AllRoundsCount, false);
+            UserDataStorage.AllRoundsCount += 1;
 
             CheckForEnd();
         }
-
     }
 
     private async void CheckForEnd()
     {
-        if (UserDataStorage.AllRoundsCount >= 10 || UserDataStorage.FirstPlayer.WinRoundCount == 2 || UserDataStorage.SecondPlayer.WinRoundCount == 2)
+        if (UserDataStorage.FirstPlayer.WinRoundCount == 2 || UserDataStorage.SecondPlayer.WinRoundCount == 2)
         {
-            UserDataStorage.AllRoundsCount = 0;
+            UserDataStorage.AllRoundsCount = 1;
 
             int firstPlayerWinCount = UserDataStorage.FirstPlayer.WinRoundCount; // сколько выйграл первый
             int secondPlayerWinCount = UserDataStorage.SecondPlayer.WinRoundCount; //сколько выйграл второй
 
             // вызов окна результатов тут должен быть
+            await DisplayAlert("Игра завершена!", "", "OK");
+            await Navigation.PushAsync(new SidePeekPage());
 
             // обнуляем
             UserDataStorage.FirstPlayer.WinRoundCount = 0;
@@ -354,17 +358,40 @@ public partial class GamePage : ContentPage
         }
     }
 
-    public void AddWinnerPoint()
+    private void AddWinnerPoint(int playerNumber, bool isWin)
     {
-        if (UserDataStorage.AllRoundsCount % 2 != 0)
+        if (isWin)
         {
-            UserDataStorage.FirstPlayer.WinRoundCount += 1;
+            if (playerNumber % 2 != 0)
+            {
+                UserDataStorage.SecondPlayer.WinRoundCount += 1;
+            }
+            else
+            {
+                UserDataStorage.FirstPlayer.WinRoundCount += 1;
+            }
+            if (playerNumber % 2 != 0)
+            {
+                UserDataStorage.FirstPlayer.WinRoundCount += 1;
+            }
+            else
+            {
+                UserDataStorage.SecondPlayer.WinRoundCount += 1;
+            }
         }
         else
         {
-            UserDataStorage.SecondPlayer.WinRoundCount += 1;
+            if (playerNumber % 2 != 0)
+            {
+                UserDataStorage.FirstPlayer.WinRoundCount += 1;
+            }
+            else
+            {
+                UserDataStorage.SecondPlayer.WinRoundCount += 1;
+            }
         }
     }
+
     private async Task GuessLetter(string buttonText, Image image)
     {
         CountAttempts();

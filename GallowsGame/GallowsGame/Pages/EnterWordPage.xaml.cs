@@ -21,8 +21,6 @@ public partial class EnterWordPage : ContentPage
 
     public EnterWordPage()
     {
-        //UserDataStorage.AllRoundsCount += 1;
-        //_round = UserDataStorage.AllRoundsCount;
         ChangeRoundCount();
         InitializeComponent();
         CreateLayout();
@@ -31,13 +29,12 @@ public partial class EnterWordPage : ContentPage
     public void ChangeRoundCount()
     {
         ChooseCurrentPlayer(UserDataStorage.AllRoundsCount);
-        UserDataStorage.AllRoundsCount += 1;
         _round = UserDataStorage.AllRoundsCount;
     }
 
     public void ChooseCurrentPlayer(int number)
     {
-        if (number % 2 == 0)
+        if (number % 2 != 0)
         {
             _currentPlayer = UserDataStorage.FirstPlayer.Name;
         }
@@ -263,7 +260,7 @@ public partial class EnterWordPage : ContentPage
             return;
         }
 
-        await Navigation.PushAsync(new GamePage(userTextLabel.Text));
+         await Navigation.PushAsync(new GamePage(userTextLabel.Text));
     }
 
     public async void OnPauseButtonClicked(object sender, EventArgs e)

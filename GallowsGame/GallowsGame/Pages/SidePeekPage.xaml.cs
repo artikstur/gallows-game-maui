@@ -13,12 +13,12 @@ namespace GallowsGame.Pages
         private async void OnChooseNamesButton(object sender, EventArgs e)
         {
             var firstPlayer = new PersonData(firstNameEntry.Text);
-            var secondPlayer = new PersonData(firstNameEntry.Text);
+            var secondPlayer = new PersonData(secondNameEntry.Text);
 
             UserDataStorage.FirstPlayer = firstPlayer;
             UserDataStorage.SecondPlayer = secondPlayer;
 
-            if (firstNameEntry.Text == "" || firstNameEntry.Text == "")
+            if (firstNameEntry.Text == "" || secondNameEntry.Text == "")
             {
                 WarningWindow warning = new WarningWindow("Впишите свои имена в поля ниже, иначе будут выбраны базовые названия");
                 await Navigation.PushModalAsync(warning);
