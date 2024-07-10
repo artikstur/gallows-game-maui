@@ -4,11 +4,35 @@ namespace GallowsGame
 {
     public partial class LoseRoundWindow : ContentPage
     {
-        public LoseRoundWindow()
+        public LoseRoundWindow(string guesser)
         {
             InitializeComponent();
             this.Opacity = 0;
+            infoText.Text = guesser;
+
+            var formattedString = new FormattedString();
+
+            var guesserSpan = new Span
+            {
+                FontFamily = "Maki-Sans",
+                Text = guesser,
+                TextColor = Colors.Red
+            };
+
+            var remainingTextSpan = new Span
+            {
+                FontFamily = "Maki-Sans",
+                Text = ", Вы проиграли раунд :(\n\n Загадывайте слово!",
+                TextColor = Colors.Black
+            };
+
+            formattedString.Spans.Add(guesserSpan);
+            formattedString.Spans.Add(remainingTextSpan);
+
+            infoText.FormattedText = formattedString;
+
         }
+ 
 
         protected override async void OnAppearing()
         {

@@ -5,12 +5,34 @@ namespace GallowsGame
 {
     public partial class WinRoundWindow : ContentPage
     {
-        public WinRoundWindow()
+        public WinRoundWindow(string guesser)
         {
             InitializeComponent();
             this.Opacity = 0;
-        }
 
+            var formattedString = new FormattedString();
+
+            var guesserSpan = new Span
+            {
+                FontFamily = "Maki-Sans",
+                Text = guesser,
+                TextColor = Colors.Red 
+            };
+
+            var remainingTextSpan = new Span
+            {
+                FontFamily = "Maki-Sans",
+                Text = ", Вы выиграли раунд :)\n\n Загадывайте слово!",
+                TextColor = Colors.Black 
+            };
+
+            formattedString.Spans.Add(guesserSpan);
+            formattedString.Spans.Add(remainingTextSpan);
+
+            infoText.FormattedText = formattedString;
+
+        }
+        
         protected override async void OnAppearing()
         {
             base.OnAppearing();

@@ -1,5 +1,6 @@
 using GallowsGame.Utils;
 using Microsoft.Maui.Layouts;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace GallowsGame.Pages;
@@ -18,6 +19,7 @@ public partial class GamePage : ContentPage
     private string _currentPlayer;
     private int _firstPlayerScores;
     private int _secondPlayerScores;
+    private string whoWalksinRound;
     public GamePage(string userText)
     {
         this.currentOpenedWord = new string('_', userText.Length);
@@ -413,25 +415,41 @@ public partial class GamePage : ContentPage
             }
 
             // вызов окна результатов тут должен быть
-            await DisplayAlert("»гра завершена!", winner, "OK");
-            //await Navigation.PushAsync(new SidePeekPage());
+
+            await ShowResult(new WinGameWindow(winner, firstPlayerWinCount, secondPlayerWinCount));
 
             // обнул€ем
             SetDefaultValues();
         }
         else
         {
+            var guesser = GetPlayers(UserDataStorage.AllRoundsCount);
+
             if (isWin)
             {
-                ShowResult(new WinRoundWindow());
+                await ShowResult(new WinRoundWindow(guesser));
             }
             else
             {
-                ShowResult(new LoseRoundWindow());
+                await ShowResult(new LoseRoundWindow(guesser));
             }
         }
     }
 
+
+    public string GetPlayers(int roundNumber)
+    {
+        // ќпредел€ем текущего игрока и следующего игрока на основе номера раунда
+        switch (roundNumber % 2)
+        {
+            case 1: 
+                return UserDataStorage.FirstPlayer.Name;
+            case 0: 
+                return UserDataStorage.SecondPlayer.Name;
+            default:
+                throw new ArgumentException("Ќомер раунда должен быть положительным целым числом");
+        }
+    }
     private void AddWinnerPoint(int playerNumber, bool isWin)
     {
         if (isWin)
@@ -493,7 +511,7 @@ public partial class GamePage : ContentPage
             currentIndex++;
             if (currentIndex != attempts)
             {
-                await Task.Delay(550);
+                await Task.Delay(400);
                 gallowsImages[currentIndex].IsVisible = true;
                 currentIndex++;
             }
@@ -501,9 +519,9 @@ public partial class GamePage : ContentPage
         DetermineOutcomeOfRound();
     }
 
-    private static void ShowResult(Page window)
+    private async Task ShowResult(Page window)
     {
-        Application.Current.MainPage.Navigation.PushModalAsync(window);
+        await Application.Current.MainPage.Navigation.PushModalAsync(window);
     }
 
     private void OnClearButtonClicked(object sender, EventArgs e)

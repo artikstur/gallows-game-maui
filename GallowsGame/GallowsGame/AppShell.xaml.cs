@@ -9,6 +9,8 @@ namespace GallowsGame
             InitializeComponent();
 
             Routing.RegisterRoute(nameof(EnterWordPage), typeof(EnterWordPage));
+            Routing.RegisterRoute(nameof(SidePeekPage), typeof(SidePeekPage));
+
         }
     }
 }

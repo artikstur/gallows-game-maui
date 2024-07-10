@@ -5,10 +5,20 @@
 
     <ContentPage.Content>
         <Grid>
-            <Image Source="win_summary_bg.png" 
+            <Image Source="win_summary_background.png" 
                    HorizontalOptions="FillAndExpand" 
                    VerticalOptions="FillAndExpand" 
                    Aspect="AspectFill"/>
+            <Label
+                     Margin="0,55,20,0"
+                     x:Name="infoText"
+                     FontSize="42"
+                     FontFamily="Maki-Sans"
+                     WidthRequest="450"
+                      HorizontalOptions="Center" 
+                      VerticalOptions="Center" 
+                      HorizontalTextAlignment="Center"
+             />
             <Button
                     Text="OK"
                     Background="Transparent"

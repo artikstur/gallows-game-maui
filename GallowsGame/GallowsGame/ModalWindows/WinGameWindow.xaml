@@ -9,15 +9,26 @@
                    HorizontalOptions="FillAndExpand" 
                    VerticalOptions="FillAndExpand" 
                    Aspect="AspectFill"/>
+            <Label
+                Margin="0,130,20,0"
+                x:Name="winText"
+                TextColor="Black"
+                FontSize="40"
+                FontFamily="Maki-Sans"
+                WidthRequest="400"
+                 HorizontalOptions="Center" 
+                 VerticalOptions="Center" 
+                 HorizontalTextAlignment="Center"
+                />
             <Button
-                    Text="OK"
+                    Text="Вернуться"
                     Background="Transparent"
                 WidthRequest="300"
                 HeightRequest="100"
-                    TextColor="Red"
-                    FontSize ="60"
+                    TextColor="#ac1f1f"
+                    FontSize ="38"
                     FontFamily="Maki-Sans"
-                    Margin="0,500,30,0"
+                    Margin="0,500,20,0"
                     Clicked="OnOkButtonClicked"
                     />
 

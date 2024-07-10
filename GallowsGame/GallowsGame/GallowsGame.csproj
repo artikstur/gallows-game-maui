@@ -66,7 +66,7 @@
 	  <None Remove="Resources\Images\game_summary_bg.png" />
 	  <None Remove="Resources\Images\lenin.png" />
 	  <None Remove="Resources\Images\lenin_icon.png" />
-	  <None Remove="Resources\Images\lose_summary_bg.png" />
+	  <None Remove="Resources\Images\lose_summary_background.png" />
 	  <None Remove="Resources\Images\new_training.png" />
 	  <None Remove="Resources\Images\ok_bttn.png" />
 	  <None Remove="Resources\Images\pausebttn.png" />
@@ -78,7 +78,7 @@
 	  <None Remove="Resources\Images\stick.png" />
 	  <None Remove="Resources\Images\stick2.png" />
 	  <None Remove="Resources\Images\thirdbttn.png" />
-	  <None Remove="Resources\Images\win_summary_bg.png" />
+	  <None Remove="Resources\Images\win_summary_background.png" />
 	</ItemGroup>
 
 	<ItemGroup>
