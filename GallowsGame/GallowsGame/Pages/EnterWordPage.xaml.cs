@@ -242,35 +242,53 @@ public partial class EnterWordPage : ContentPage
     public async void OnSubmitButtonClicked(object sender, EventArgs e)
     {
         ImageButton button = (ImageButton)sender;
-        await button.ScaleTo(1.2, 100, Easing.Linear);
-        await button.ScaleTo(1, 100, Easing.Linear);
+        button.IsEnabled = false;
 
-        if (!(userTextLabel.Text.Length > 2 && userTextLabel.Text.Length < 9))
+        try
         {
-            ShowError("минимум 3 буквы, максимум - 8");
-            return; 
+            await button.ScaleTo(1.2, 100, Easing.Linear);
+            await button.ScaleTo(1, 100, Easing.Linear);
+
+            if (!(userTextLabel.Text.Length > 2 && userTextLabel.Text.Length < 9))
+            {
+                ShowError("минимум 3 буквы, максимум - 8");
+                return;
+            }
+
+            var apiClient = new ApiClient();
+            var res = await apiClient.GetWordData(userTextLabel.Text);
+
+            if (!res)
+            {
+                ShowError("введенное слово должно быть именем существительным в единственном числе");
+                return;
+            }
+
+            await Navigation.PushAsync(new GamePage(userTextLabel.Text));
         }
-
-        var apiClient = new ApiClient();
-        var res = await apiClient.GetWordData(userTextLabel.Text);
-
-        if (!res)
+        finally
         {
-            ShowError("введенное слово должно быть именем существительным в единственном числе");
-            return;
+            button.IsEnabled = true; 
         }
-
-         await Navigation.PushAsync(new GamePage(userTextLabel.Text));
     }
 
-    public async void OnPauseButtonClicked(object sender, EventArgs e)
+    private async void OnPauseButtonClicked(object sender, EventArgs e)
     {
         ImageButton button = (ImageButton)sender;
-        await button.ScaleTo(1.2, 100, Easing.Linear);
-        await button.ScaleTo(1, 100, Easing.Linear);
-        
-        await Navigation.PushAsync(new MenuPage());
+        button.IsEnabled = false; 
+        try
+        {
+            await button.ScaleTo(1.2, 100, Easing.Linear);
+            await button.ScaleTo(1, 100, Easing.Linear);
+
+            await Navigation.PushAsync(new MenuPage());
+        }
+        finally
+        {
+            button.IsEnabled = true;
+        }
     }
+       
 
     public async static void ShowError(string message)
     {

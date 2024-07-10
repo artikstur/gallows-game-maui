@@ -63,6 +63,7 @@
 	  <None Remove="Resources\Images\firstbttn.png" />
 	  <None Remove="Resources\Images\firstPageBg.png" />
 	  <None Remove="Resources\Images\gallow_concept.png" />
+	  <None Remove="Resources\Images\game_summary_bg.png" />
 	  <None Remove="Resources\Images\lenin.png" />
 	  <None Remove="Resources\Images\lenin_icon.png" />
 	  <None Remove="Resources\Images\lose_summary_bg.png" />
@@ -88,6 +89,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="ModalWindows\WinGameWindow.xaml.cs">
+	    <DependentUpon>WinGameWindow.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="ModalWindows\WinRoundWindow.xaml.cs">
 	    <DependentUpon>WinRoundWindow.xaml</DependentUpon>
 	  </Compile>
@@ -101,6 +105,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="ModalWindows\WarningWindow.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="ModalWindows\WinGameWindow.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="ModalWindows\WinRoundWindow.xaml">

@@ -304,10 +304,18 @@ public partial class GamePage : ContentPage
     private async void OnPauseButtonClicked(object sender, EventArgs e)
     {
         ImageButton button = (ImageButton)sender;
-        await button.ScaleTo(1.2, 100, Easing.Linear);
-        await button.ScaleTo(1, 100, Easing.Linear);
+        button.IsEnabled = false;
+        try
+        {
+            await button.ScaleTo(1.2, 100, Easing.Linear);
+            await button.ScaleTo(1, 100, Easing.Linear);
 
-        await Navigation.PushAsync(new MenuPage());
+            await Navigation.PushAsync(new MenuPage());
+        }
+        finally
+        {
+            button.IsEnabled = true;
+        }
     }
 
     private StackLayout CreateKeyBoardLayout(int boxSize)
@@ -485,7 +493,7 @@ public partial class GamePage : ContentPage
             currentIndex++;
             if (currentIndex != attempts)
             {
-                //await Task.Delay(550);
+                await Task.Delay(550);
                 gallowsImages[currentIndex].IsVisible = true;
                 currentIndex++;
             }
