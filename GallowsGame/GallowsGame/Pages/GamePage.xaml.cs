@@ -16,29 +16,42 @@ public partial class GamePage : ContentPage
     private int currentIndex = 0;
     private string folderPath;
     private string _currentPlayer;
+    private int _firstPlayerScores;
+    private int _secondPlayerScores;
     public GamePage(string userText)
     {
         this.currentOpenedWord = new string('_', userText.Length);
         this.hiddenWord = userText;
 
         InitializeComponent();
-        ChooseCurrentPlayer(UserDataStorage.AllRoundsCount);
+
+        SetPlayersScores();
+        ChooseCurrentPlayer();
+
         CreateLayout();
     }
 
-    public void ChooseCurrentPlayer(int number)
+    private void SetPlayersScores()
     {
-        if (number % 2 != 0)
+        _firstPlayerScores = UserDataStorage.FirstPlayer.WinRoundCount;
+        _secondPlayerScores = UserDataStorage.SecondPlayer.WinRoundCount;
+    }
+    private void ChooseCurrentPlayer()
+    {
+        int currentRound = UserDataStorage.AllRoundsCount;
+        if (currentRound % 2 != 0)
         {
+            // если раунд нечетн, то отгадывает второй
             _currentPlayer = UserDataStorage.SecondPlayer.Name;
         }
         else
         {
+            // если раунд четн, то отгадывает первый
             _currentPlayer = UserDataStorage.FirstPlayer.Name;
         }
     }
 
-    public FlexLayout CreateTopBarLayout()
+    private FlexLayout CreateTopBarLayout()
     {
         var coinImage = new Image()
         {
@@ -61,24 +74,56 @@ public partial class GamePage : ContentPage
             Children = { coinImage, balanceLabel },
         };
 
-        var currentWordClue = new Label()
+        var firstPlayerNameLabel = new Label()
         {
             FontFamily = "Maki-Sans",
             Margin = new Thickness(0, 11, 0, 0),
             HorizontalOptions = LayoutOptions.Center,
-            Text = $"{_currentPlayer}",
+            Text = $"{UserDataStorage.FirstPlayer.Name}",
             FontSize = 40,
             TextColor = Colors.Navy
         };
 
-        var currentScores = new Label()
+        var secondPlayerNameLabel = new Label()
         {
             FontFamily = "Maki-Sans",
             Margin = new Thickness(0, 11, 0, 0),
             HorizontalOptions = LayoutOptions.Center,
-            Text = $"{UserDataStorage.FirstPlayer.WinRoundCount} : {UserDataStorage.SecondPlayer.WinRoundCount}",
-            FontSize = 50,
+            Text = $"{UserDataStorage.SecondPlayer.Name}",
+            FontSize = 40,
             TextColor = Colors.Navy
+        };
+
+        var currentScoresLabel = new Label()
+        {
+            FontFamily = "Maki-Sans",
+            Margin = new Thickness(0, 11, 0, 0),
+            HorizontalOptions = LayoutOptions.Center,
+            Text = $"{_firstPlayerScores} : {_secondPlayerScores}",
+            FontSize = 40,
+            TextColor = Colors.Navy
+        };
+        var firstPlayerIcon = new Image()
+        {
+            Source = "stalin_icon.png",
+            WidthRequest = 50,
+            HeightRequest = 50,
+            Margin = new Thickness(5, 10, 5, 0),
+        };
+
+        var secondPlayerIcon = new Image()
+        {
+            Source = "lenin_icon.png",
+            WidthRequest = 50,
+            HeightRequest = 50,
+            Margin = new Thickness(5, 10, 5, 0),
+        };
+
+        var currentScoresBox = new FlexLayout()
+        {
+            Children = { firstPlayerNameLabel, firstPlayerIcon, currentScoresLabel, secondPlayerIcon, secondPlayerNameLabel},
+            AlignContent = FlexAlignContent.Center,
+            Wrap = FlexWrap.Wrap,
         };
 
         currentWord = new Label()
@@ -93,7 +138,7 @@ public partial class GamePage : ContentPage
 
         var leftBarCenterBox = new VerticalStackLayout()
         {
-            Children = { currentWordClue, currentWord, currentScores }
+            Children = { currentScoresBox, currentWord}
         };
 
         var pauseBtn = new ImageButton()
@@ -109,7 +154,7 @@ public partial class GamePage : ContentPage
         pauseBtn.Clicked += OnPauseButtonClicked;
 
         FlexLayout.SetBasis(coinBox, new FlexBasis(0.33f, true));
-        FlexLayout.SetBasis(leftBarCenterBox, new FlexBasis(0.33f, true));
+        FlexLayout.SetBasis(leftBarCenterBox, new FlexBasis(0.45f, true));
         FlexLayout.SetBasis(pauseBtn, new FlexBasis(0.33f, true));
 
         var topBar = new FlexLayout()
@@ -124,7 +169,7 @@ public partial class GamePage : ContentPage
         return topBar;
     }
 
-    public List<Image> CreateGallowsImagesLayout(string path)
+    private List<Image> CreateGallowsImagesLayout(string path)
     {
         List<ImageSource> imageSources = ImagesLoader.LoadFromFolder(path);
 
@@ -155,13 +200,17 @@ public partial class GamePage : ContentPage
             folderPath = PathMaker.GetFolderPath("10_attempts");
         }
         else if (hiddenWord.Length == 6)
+        {
             folderPath = PathMaker.GetFolderPath("12_attempts");
-
-        else folderPath = PathMaker.GetFolderPath("14_attempts");
+        }
+        else
+        {
+            folderPath = PathMaker.GetFolderPath("14_attempts");
+        }
 
     }
 
-    public FlexLayout CreateCenterLayout()
+    private FlexLayout CreateCenterLayout()
     {
         ChooseFolderPath();
 
@@ -225,7 +274,7 @@ public partial class GamePage : ContentPage
 
         return centerBox;
     }
-    public void CreateLayout()
+    private void CreateLayout()
     {
         var topBar = CreateTopBarLayout();
         var centerBox = CreateCenterLayout();
@@ -252,7 +301,7 @@ public partial class GamePage : ContentPage
             }
         };
     }
-    public async void OnPauseButtonClicked(object sender, EventArgs e)
+    private async void OnPauseButtonClicked(object sender, EventArgs e)
     {
         ImageButton button = (ImageButton)sender;
         await button.ScaleTo(1.2, 100, Easing.Linear);
@@ -290,7 +339,7 @@ public partial class GamePage : ContentPage
     }
 
 
-    public async void OnKeyboardButtonClicked(object sender, EventArgs e)
+    private async void OnKeyboardButtonClicked(object sender, EventArgs e)
     {
         Button button = (Button)sender;
 
@@ -304,12 +353,10 @@ public partial class GamePage : ContentPage
         Grid parentGrid = (Grid)button.Parent;
         Image image = parentGrid.Children.OfType<Image>().FirstOrDefault();
 
-
-
         await GuessLetter(button.Text, image);
     }
 
-    public void CountAttempts()
+    private void CountAttempts()
     {
         if (hiddenWord.Length < 6)
             attempts = 10;
@@ -318,43 +365,62 @@ public partial class GamePage : ContentPage
         else attempts = 14;
     }
 
-    public void DetermineOutcomeOfRound()
+    private void DetermineOutcomeOfRound()
     {
-
         if (hiddenWord == currentOpenedWord)
-        {
-            ShowResult(new WinRoundWindow());
-            AddWinnerPoint(UserDataStorage.AllRoundsCount, true);
-            UserDataStorage.AllRoundsCount += 1;
-
-            CheckForEnd();
+        {  
+            CheckForEnd(true);
         }
         else if (currentAttempts >= attempts)
         {
-            ShowResult(new LoseRoundWindow());
-            AddWinnerPoint(UserDataStorage.AllRoundsCount, false);
-            UserDataStorage.AllRoundsCount += 1;
-
-            CheckForEnd();
+            CheckForEnd(false);
         }
     }
-
-    private async void CheckForEnd()
+    private void SetDefaultValues()
     {
+        UserDataStorage.FirstPlayer.WinRoundCount = 0;
+        UserDataStorage.SecondPlayer.WinRoundCount = 0;
+        UserDataStorage.AllRoundsCount = 1;
+    }
+
+    private async void CheckForEnd(bool isWin)
+    {
+        AddWinnerPoint(UserDataStorage.AllRoundsCount, isWin);
+        UserDataStorage.AllRoundsCount += 1;
+
         if (UserDataStorage.FirstPlayer.WinRoundCount == 2 || UserDataStorage.SecondPlayer.WinRoundCount == 2)
         {
-            UserDataStorage.AllRoundsCount = 1;
-
             int firstPlayerWinCount = UserDataStorage.FirstPlayer.WinRoundCount; // сколько выйграл первый
             int secondPlayerWinCount = UserDataStorage.SecondPlayer.WinRoundCount; //сколько выйграл второй
 
+            //имя победителя
+            string winner;
+            if (firstPlayerWinCount == 2)
+            {
+                winner = UserDataStorage.FirstPlayer.Name;
+            }
+            else
+            {
+                winner = UserDataStorage.SecondPlayer.Name;
+            }
+
             // вызов окна результатов тут должен быть
-            await DisplayAlert("Игра завершена!", "", "OK");
-            await Navigation.PushAsync(new SidePeekPage());
+            await DisplayAlert("Игра завершена!", winner, "OK");
+            //await Navigation.PushAsync(new SidePeekPage());
 
             // обнуляем
-            UserDataStorage.FirstPlayer.WinRoundCount = 0;
-            UserDataStorage.SecondPlayer.WinRoundCount = 0;
+            SetDefaultValues();
+        }
+        else
+        {
+            if (isWin)
+            {
+                ShowResult(new WinRoundWindow());
+            }
+            else
+            {
+                ShowResult(new LoseRoundWindow());
+            }
         }
     }
 
@@ -369,14 +435,6 @@ public partial class GamePage : ContentPage
             else
             {
                 UserDataStorage.FirstPlayer.WinRoundCount += 1;
-            }
-            if (playerNumber % 2 != 0)
-            {
-                UserDataStorage.FirstPlayer.WinRoundCount += 1;
-            }
-            else
-            {
-                UserDataStorage.SecondPlayer.WinRoundCount += 1;
             }
         }
         else
@@ -435,17 +493,13 @@ public partial class GamePage : ContentPage
         DetermineOutcomeOfRound();
     }
 
-
-
-    public static void ShowResult(Page window)
+    private static void ShowResult(Page window)
     {
         Application.Current.MainPage.Navigation.PushModalAsync(window);
     }
 
-    public void OnClearButtonClicked(object sender, EventArgs e)
+    private void OnClearButtonClicked(object sender, EventArgs e)
     {
         Button button = (Button)sender;
     }
-
-   
 } 

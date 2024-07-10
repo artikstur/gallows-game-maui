@@ -10,6 +10,7 @@ namespace GallowsGame.Utils.UserData
     {
         public string Name { get; set; } = "";
         public int WinRoundCount { get; set; }
+        public int Balance { get; set; } = 3;
         public PersonData(string name)
         {
             Name = name;
