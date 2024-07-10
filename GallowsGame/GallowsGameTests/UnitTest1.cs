@@ -8,10 +8,10 @@ namespace GallowsGameTests
         [Fact]
         public void StartGame_InitialState_CorrectlyDisplayed()
         {
-            var game = new GamePage("òåñò");
+            var game = new GamePage("Ã²Ã¥Ã±Ã²");
             var hiddenWordField = typeof(GamePage).GetField("hiddenWord", BindingFlags.NonPublic | BindingFlags.Instance);
             var hiddenWord = hiddenWordField.GetValue(game);
-            Assert.Equal("òåñò", hiddenWord);
+            Assert.Equal("Ã²Ã¥Ã±Ã²", hiddenWord);
 
             var currentOpenedWordField = typeof(GamePage).GetField("currentOpenedWord", BindingFlags.NonPublic | BindingFlags.Instance);
             var currentOpenedWord = currentOpenedWordField.GetValue(game);
@@ -21,18 +21,13 @@ namespace GallowsGameTests
         [Fact]
         public void CorrectLetterGuess_UpdatesGameState()
         {
-            var game = new GamePage("òåñò");
+            var game = new GamePage("Ã²Ã¥Ã±Ã²");
             var guessLetterMethod = typeof(GamePage).GetMethod("GuessLetter", BindingFlags.NonPublic | BindingFlags.Instance);
-            guessLetterMethod.Invoke(game, new object[] { "ò", new Image() });
+            guessLetterMethod.Invoke(game, new object[] { "Ã²", new Image() });
 
             var currentOpenedWordField = typeof(GamePage).GetField("currentOpenedWord", BindingFlags.NonPublic | BindingFlags.Instance);
             var currentOpenedWord = currentOpenedWordField.GetValue(game);
-            Assert.Equal("ò__ò", currentOpenedWord);
-        }
-        [Fact]
-        public void TestCorrectGuessWithMinimalWord()
-        {
-
+            Assert.Equal("Ã²__Ã²", currentOpenedWord);
         }
     }
 }
