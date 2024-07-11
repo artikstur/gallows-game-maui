@@ -8,6 +8,8 @@ namespace GallowsGame.Pages
         public SidePeekPage()
         {
             InitializeComponent();
+            firstNameEntry.Text = "";
+            secondNameEntry.Text = "";
         }
 
         private async void OnChooseNamesButton(object sender, EventArgs e)
@@ -20,8 +22,12 @@ namespace GallowsGame.Pages
 
             if (firstNameEntry.Text == "" || secondNameEntry.Text == "")
             {
-                WarningWindow warning = new WarningWindow("Впишите свои имена в поля ниже, иначе будут выбраны базовые названия");
+                WarningWindow warning = new WarningWindow("Впишите оба имени в поля ниже, иначе будут выбраны базовые названия");
                 await Navigation.PushModalAsync(warning);
+            }
+            else if (firstNameEntry.Text.Length > 13 || secondNameEntry.Text.Length > 13)
+            {
+                await Navigation.PushModalAsync(new CustomErrorDialog("Введите имя или никнейм до 13 символов!"));
             }
             else
             {

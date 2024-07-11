@@ -18,5 +18,32 @@ namespace GallowsGame.Utils
         {
             return GetEnumerator();
         }
+
+        public void ChangeButtonImage(char letter)
+        {
+            foreach (var buttonGrid in Buttons)
+            {
+                foreach (var element in buttonGrid.Children)
+                {
+                    if (element is Button button && button.Text == letter.ToString())
+                    {
+                        foreach (var innerElement in buttonGrid.Children)
+                        {
+                            if (innerElement is Image image)
+                            {
+                                image.Source = "right_letter.png";
+                            }
+                        }
+
+                        button.IsEnabled = false;
+                        button.Background = Colors.Transparent;
+                        button.TextColor = Colors.Black;
+                        return;
+
+
+                    }
+                }
+            }
+        }
     }
 }

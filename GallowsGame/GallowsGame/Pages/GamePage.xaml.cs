@@ -7,20 +7,21 @@ namespace GallowsGame.Pages;
 
 public partial class GamePage : ContentPage
 {
-    private int coinCount = 3;
     private string hiddenWord;
     private string currentOpenedWord; //отгаданное на данный момент слово
     private Label currentWord;
+    private Label balanceLabel;
     private List<Image> gallowsImages;
     private int attempts;
     private int currentAttempts;
     private int currentIndex = 0;
     private string folderPath;
-    private string _currentPlayer;
+    private Utils.UserData.PersonData currentPlayer;
     private int _firstPlayerScores;
     private int _secondPlayerScores;
     private string _firstPlayerName;
     private string _secondPlayerName;
+    private Utils.CustomKeyboard keyboard;
     public GamePage(string userText)
     {
         this.currentOpenedWord = new string('_', userText.Length);
@@ -47,12 +48,12 @@ public partial class GamePage : ContentPage
         if (currentRound % 2 != 0)
         {
             // если раунд нечетн, то отгадывает второй
-            _currentPlayer = UserDataStorage.SecondPlayer.Name;
+            currentPlayer = UserDataStorage.SecondPlayer;
         }
         else
         {
             // если раунд четн, то отгадывает первый
-            _currentPlayer = UserDataStorage.FirstPlayer.Name;
+            currentPlayer = UserDataStorage.FirstPlayer;
         }
     }
 
@@ -66,10 +67,10 @@ public partial class GamePage : ContentPage
             WidthRequest = 50,
         };
 
-        var balanceLabel = new Label()
+        balanceLabel = new Label()
         {
             FontFamily = "Maki-Sans",
-            Text = coinCount.ToString(),
+            Text = currentPlayer.Balance.ToString(),
             FontSize = 50,
             TextColor = Colors.Black
         };
@@ -246,13 +247,18 @@ public partial class GamePage : ContentPage
 
         var keyboardLayOut = CreateKeyBoardLayout(700);
 
-        var cluePriceLabel = new Label()
+        var cluePriceButton = new Button()
         {
             FontFamily = "Maki-Sans",
-            Text = "ѕодсказка - ",
-            FontSize = 50,
-            TextColor = Colors.Black
+            Text = "ѕодсказка - 1",
+            FontSize = 40,
+            TextColor = Colors.Black,
+            WidthRequest = 340,
+            HeightRequest = 80,
+            BackgroundColor = Colors.Blue
         };
+
+        cluePriceButton.Clicked += RevealHint;
 
         var coinImage = new Image()
         {
@@ -265,7 +271,7 @@ public partial class GamePage : ContentPage
         var clueBox = new FlexLayout()
         {
             Margin = new Thickness(0, 30, 0, 0),
-            Children = { cluePriceLabel, coinImage },
+            Children = { cluePriceButton, coinImage },
             HorizontalOptions = LayoutOptions.Center,
             AlignContent = FlexAlignContent.Start,
         };
@@ -336,7 +342,7 @@ public partial class GamePage : ContentPage
 
     private StackLayout CreateKeyBoardLayout(int boxSize)
     {
-        var keyboard = KeyboardBuilder.CreateKeyboard(this, OnKeyboardButtonClicked, OnClearButtonClicked, false);
+        keyboard = KeyboardBuilder.CreateKeyboard(this, OnKeyboardButtonClicked, OnClearButtonClicked, false);
 
         var keyboardLayout = new FlexLayout()
         {
@@ -437,33 +443,18 @@ public partial class GamePage : ContentPage
         }
         else
         {
-            var guesser = GetPlayers(UserDataStorage.AllRoundsCount);
-
             if (isWin)
             {
-                await ShowResult(new WinRoundWindow(guesser));
+                await ShowResult(new WinRoundWindow(currentPlayer.Name));
             }
             else
             {
-                await ShowResult(new LoseRoundWindow(guesser));
+                await ShowResult(new LoseRoundWindow(currentPlayer.Name));
             }
         }
     }
 
 
-    public string GetPlayers(int roundNumber)
-    {
-        // ќпредел€ем текущего игрока и следующего игрока на основе номера раунда
-        switch (roundNumber % 2)
-        {
-            case 1: 
-                return UserDataStorage.FirstPlayer.Name;
-            case 0: 
-                return UserDataStorage.SecondPlayer.Name;
-            default:
-                throw new ArgumentException("Ќомер раунда должен быть положительным целым числом");
-        }
-    }
     private void AddWinnerPoint(int playerNumber, bool isWin)
     {
         if (isWin)
@@ -531,6 +522,46 @@ public partial class GamePage : ContentPage
             }
         }
         DetermineOutcomeOfRound();
+    }
+
+    private async void RevealHint(object sender, EventArgs e)
+    {
+        
+        if (currentPlayer.Balance > 0)
+        {
+            currentPlayer.Balance--;
+            balanceLabel.Text = currentPlayer.Balance.ToString();
+            CountAttempts();
+
+            int firstUnopenedIndex = currentOpenedWord.IndexOf('_');
+
+            if (firstUnopenedIndex != -1)
+            {
+                char letterToOpen = hiddenWord[firstUnopenedIndex];
+
+                keyboard.ChangeButtonImage(letterToOpen);
+
+                StringBuilder sb = new StringBuilder(currentOpenedWord);
+
+                for (int i = 0; i < hiddenWord.Length; i++)
+                {
+                    if (hiddenWord[i] == letterToOpen)
+                    {
+                        sb[i] = letterToOpen;
+                    }
+                }
+                currentOpenedWord = sb.ToString();
+                currentWord.Text = currentOpenedWord;
+            }
+
+            DetermineOutcomeOfRound();
+        }
+        else
+        {
+            await Navigation.PushModalAsync(new CustomErrorDialog("” вас на балансе не хватает монет!"));
+        }
+
+       
     }
 
     private async Task ShowResult(Page window)
