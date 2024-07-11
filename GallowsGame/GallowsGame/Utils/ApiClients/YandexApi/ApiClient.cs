@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GallowsGame.Utils.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -48,16 +49,15 @@ namespace GallowsGame.Utils.ApiClients.YandexApi
                 {
                     if (def.pos == "noun")
                     {
-                        return true;
+                        if (!WordsStorage.profanities.Contains(word.ToLower()))
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
                     }
-
-                    //foreach (var tr in def.tr)
-                    //{
-                    //    if (tr.pos == "noun")
-                    //    {
-                    //        return true;
-                    //    }
-                    //}
                 }
             }
 
