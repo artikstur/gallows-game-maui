@@ -549,11 +549,21 @@ public partial class GamePage : ContentPage
             balanceLabel.Text = currentPlayer.Balance.ToString();
             CountAttempts();
 
-            int firstUnopenedIndex = currentOpenedWord.IndexOf('_');
-
-            if (firstUnopenedIndex != -1)
+            List<int> hiddenIndices = new List<int>();
+            for (int i = 0; i < currentOpenedWord.Length; i++)
             {
-                char letterToOpen = hiddenWord[firstUnopenedIndex];
+                if (currentOpenedWord[i] == '_')
+                {
+                    hiddenIndices.Add(i);
+                }
+            }
+
+            int randomIndex = new Random().Next(0, hiddenIndices.Count);
+            int selectedIndex = hiddenIndices[randomIndex];
+
+            if (selectedIndex != -1)
+            {
+                char letterToOpen = hiddenWord[selectedIndex];
 
                 keyboard.ChangeButtonImage(letterToOpen);
 

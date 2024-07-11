@@ -31,7 +31,7 @@ namespace GallowsGame.Utils
                         {
                             if (innerElement is Image image)
                             {
-                                image.Source = "right_letter.png";
+                                image.Source = "hint_letter.png";
                             }
                         }
 
