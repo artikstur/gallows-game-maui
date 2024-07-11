@@ -47,12 +47,10 @@ public partial class GamePage : ContentPage
         int currentRound = UserDataStorage.AllRoundsCount;
         if (currentRound % 2 != 0)
         {
-            // если раунд нечетн, то отгадывает второй
             currentPlayer = UserDataStorage.SecondPlayer;
         }
         else
         {
-            // если раунд четн, то отгадывает первый
             currentPlayer = UserDataStorage.FirstPlayer;
         }
     }
@@ -80,6 +78,12 @@ public partial class GamePage : ContentPage
             Children = { coinImage, balanceLabel },
         };
 
+        //var firstPlayerColor = currentPlayer.Name == _firstPlayerName ? Colors.Red : Colors.Navy;
+        //var secondPlayerColor = currentPlayer.Name == _secondPlayerName ? Colors.Red : Colors.Navy;
+
+        var firstPlayerTextDecorations = currentPlayer.Name == _firstPlayerName ? TextDecorations.Underline : TextDecorations.None;
+        var secondPlayerTextDecorations = currentPlayer.Name == _secondPlayerName ? TextDecorations.Underline : TextDecorations.None;
+
         var firstPlayerNameLabel = new Label()
         {
             FontFamily = "Maki-Sans",
@@ -87,9 +91,11 @@ public partial class GamePage : ContentPage
             HorizontalOptions = LayoutOptions.Center,
             Text = $"{_firstPlayerName}",
             FontSize = 35,
-            TextColor = Colors.Navy,
-            WidthRequest = 300,
+            //TextColor = firstPlayerColor,
+            TextColor = Colors.Red,
+            WidthRequest = 290,
             HorizontalTextAlignment = TextAlignment.End,
+            TextDecorations = firstPlayerTextDecorations,
         };
 
         var secondPlayerNameLabel = new Label()
@@ -99,9 +105,11 @@ public partial class GamePage : ContentPage
             HorizontalOptions = LayoutOptions.Center,
             Text = $"{_secondPlayerName}",
             FontSize = 35,
+            //TextColor = secondPlayerColor,
             TextColor = Colors.Navy,
-            WidthRequest = 300,
+            WidthRequest = 290,
             HorizontalTextAlignment = TextAlignment.Start,
+            TextDecorations = secondPlayerTextDecorations,
         };
 
         var currentScoresLabel = new Label()
@@ -255,17 +263,18 @@ public partial class GamePage : ContentPage
             TextColor = Colors.Black,
             WidthRequest = 340,
             HeightRequest = 80,
-            BackgroundColor = Colors.Blue
+            BackgroundColor = Colors.Transparent,
         };
 
         cluePriceButton.Clicked += RevealHint;
 
         var coinImage = new Image()
         {
-            Margin = new Thickness(5, 3, 0, 0),
+            Margin = new Thickness(5, 11, 0, 0),
             Source = "coin.png",
             HeightRequest = 40,
             WidthRequest = 40,
+            BackgroundColor = Colors.Transparent,
         };
 
         var clueBox = new FlexLayout()
@@ -389,10 +398,17 @@ public partial class GamePage : ContentPage
     private void CountAttempts()
     {
         if (hiddenWord.Length < 6)
+        {
             attempts = 10;
+        }
         else if (hiddenWord.Length == 6)
+        {
             attempts = 12;
-        else attempts = 14;
+        }
+        else
+        {
+            attempts = 14;
+        }
     }
 
     private void DetermineOutcomeOfRound()
