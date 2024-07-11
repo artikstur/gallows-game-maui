@@ -40,11 +40,13 @@ namespace GallowsGame
             {
               //  mediaPlayer.Play();
                 SoundBttn.Text = "Звук: вкл";
+                BackgroundMusicManager.PlayMusic();
             }
             else
             {
               //  mediaPlayer.Pause();
                 SoundBttn.Text = "Звук: выкл";
+                BackgroundMusicManager.PauseMusic();
             }
         }
     }

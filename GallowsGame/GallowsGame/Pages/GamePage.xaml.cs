@@ -1,5 +1,6 @@
 using GallowsGame.Utils;
 using Microsoft.Maui.Layouts;
+using Plugin.Maui.Audio;
 using System.Runtime.CompilerServices;
 using System.Text;
 
@@ -32,6 +33,7 @@ public partial class GamePage : ContentPage
         SetPlayersData();
         ChooseCurrentPlayer();
 
+        PlayRoundEffect();
         CreateLayout();
     }
 
@@ -41,6 +43,25 @@ public partial class GamePage : ContentPage
         _secondPlayerScores = UserDataStorage.SecondPlayer.WinRoundCount;
         _firstPlayerName = UserDataStorage.FirstPlayer.Name;
         _secondPlayerName = UserDataStorage.SecondPlayer.Name;
+    }
+
+    private void PlayRoundEffect()
+    {
+        int currentRound = UserDataStorage.AllRoundsCount;
+
+        switch (currentRound)
+        {
+            case 1:
+                PlaySound("first.wav");
+                break;
+            case 2:
+                PlaySound("second.wav");
+                break;
+            case 3:
+                PlaySound("final.wav");
+                break;
+        }
+
     }
     private void ChooseCurrentPlayer()
     {
@@ -497,12 +518,22 @@ public partial class GamePage : ContentPage
         }
     }
 
+    IAudioPlayer player;
+    private async void PlaySound(string fileName)
+    {
+        var audioManager = AudioManager.Current;
+        player = audioManager.CreatePlayer(await FileSystem.OpenAppPackageFileAsync(fileName)); 
+        player.Play();
+    }
+
     private async Task GuessLetter(string buttonText, Image image)
     {
         CountAttempts();
 
         if (hiddenWord.Contains(buttonText))
         {
+            PlaySound("CorrectLetter.wav");
+
             image.Source = "right_letter.png";
 
             StringBuilder sb = new StringBuilder(currentOpenedWord);
@@ -526,7 +557,9 @@ public partial class GamePage : ContentPage
         }
         else
         {
-            currentAttempts+=2;
+            PlaySound("WrongLetter.wav");
+
+            currentAttempts +=2;
             image.Source = "wrong_letter.png";
             gallowsImages[currentIndex].IsVisible = true;
             currentIndex++;
