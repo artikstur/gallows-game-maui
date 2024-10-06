@@ -1,7 +1,6 @@
 using GallowsGame.Utils;
+using GallowsGame.Utils.ApiClients.YandexApi;
 using Microsoft.Maui.Layouts;
-using System.Security.AccessControl;
-using System.Xml.XPath;
 
 namespace GallowsGame.Pages;
 
@@ -17,13 +16,33 @@ public partial class EnterWordPage : ContentPage
         HorizontalOptions = LayoutOptions.Center
     };
     private string userText  = "";
+    private int _round;
+    private string _currentPlayer;
 
     public EnterWordPage()
     {
+        ChangeRoundCount();
         InitializeComponent();
         CreateLayout();
     }
 
+    public void ChangeRoundCount()
+    {
+        ChooseCurrentPlayer(UserDataStorage.AllRoundsCount);
+        _round = UserDataStorage.AllRoundsCount;
+    }
+
+    public void ChooseCurrentPlayer(int number)
+    {
+        if (number % 2 != 0)
+        {
+            _currentPlayer = UserDataStorage.FirstPlayer.Name;
+        }
+        else
+        {
+            _currentPlayer = UserDataStorage.SecondPlayer.Name;
+        }
+    }
     public void CreateLayout()
     {
         var topBox = CreateTopLayout();
@@ -90,7 +109,7 @@ public partial class EnterWordPage : ContentPage
     {
         Label titleLabel = new Label()
         {
-            Text = "Раунд 1",
+            Text = $"Раунд {_round}",
             TextColor = Colors.Red,
             FontSize = 48,
             FontFamily = "Maki-Sans",
@@ -135,7 +154,7 @@ public partial class EnterWordPage : ContentPage
     {
         Label enterWordLabel = new Label()
         {
-            Text = "Введите слово",
+            Text = $"{_currentPlayer}, введите слово",
             TextColor = Colors.Navy,
             FontSize = 45,
             FontFamily = "Maki-Sans",
@@ -174,17 +193,9 @@ public partial class EnterWordPage : ContentPage
             Source = "inroductory_line.png",
         };
 
-        var checkWordImage = new Image()
+        ImageButton innerBtn = new ImageButton()
         {
-            WidthRequest = 70,
-            HeightRequest = 70,
             Source = "confirm_bttn.png",
-            HorizontalOptions = LayoutOptions.End,
-            Margin = new Thickness(0, 0, 400, 0)
-        };
-
-        Button innerBtn = new Button()
-        {
             WidthRequest = 70,
             HeightRequest = 70,
             BackgroundColor = Colors.Transparent,
@@ -194,27 +205,20 @@ public partial class EnterWordPage : ContentPage
 
         innerBtn.Clicked += OnSubmitButtonClicked;
 
-        var checkWordBox = new Grid()
-        {
-            Children =
-            {
-                checkWordImage,
-                innerBtn
-            }
-        };
-
         var enterWordBox = new Grid()
         {
-            Children = { enterWordImage, userTextLabel, checkWordBox }
+            Children = { enterWordImage, userTextLabel, innerBtn }
         };
 
         return enterWordBox;
     }
 
-    public void OnKeyboardButtonClicked(object sender, EventArgs e)
+    public async void OnKeyboardButtonClicked(object sender, EventArgs e)
     {
         Button button = (Button)sender;
-        button.BackgroundColor = Colors.Aqua;
+        await button.ScaleTo(1.2, 100, Easing.Linear);
+        await button.ScaleTo(1, 100, Easing.Linear);
+
         if (userTextLabel.Text.Length < 8)
         {
             userTextLabel.Text += button.Text;
@@ -222,10 +226,11 @@ public partial class EnterWordPage : ContentPage
         }
     }
 
-    public void OnClearButtonClicked(object sender, EventArgs e)
+    public async void OnClearButtonClicked(object sender, EventArgs e)
     {
-        Button button = (Button)sender;
-        button.BackgroundColor = Colors.Aqua;
+        ImageButton button = (ImageButton)sender;
+        await button.ScaleTo(1.2, 100, Easing.Linear);
+        await button.ScaleTo(1, 100, Easing.Linear);
 
         if (userTextLabel.Text.Length > 0)
         {
@@ -234,24 +239,56 @@ public partial class EnterWordPage : ContentPage
         }
     }
 
-    public void OnSubmitButtonClicked(object sender, EventArgs e)
+    public async void OnSubmitButtonClicked(object sender, EventArgs e)
     {
-        Button button = (Button)sender;
-        button.BackgroundColor = Colors.Aqua;
+        ImageButton button = (ImageButton)sender;
+        button.IsEnabled = false;
 
-        if (!(userTextLabel.Text.Length > 2 && userTextLabel.Text.Length < 9))
+        try
         {
-            ShowError("минимум 3 буквы, максимум - 8");
-            return; 
+            await button.ScaleTo(1.2, 100, Easing.Linear);
+            await button.ScaleTo(1, 100, Easing.Linear);
+
+            if (!(userTextLabel.Text.Length > 2 && userTextLabel.Text.Length < 9))
+            {
+                ShowError("минимум 3 буквы, максимум - 8");
+                return;
+            }
+
+            var apiClient = new ApiClient();
+            var res = await apiClient.GetWordData(userTextLabel.Text);
+
+            if (!res)
+            {
+                ShowError("введенное слово должно быть именем существительным в единственном числе");
+                return;
+            }
+
+            await Navigation.PushAsync(new GamePage(userTextLabel.Text));
         }
-
-        Navigation.PushAsync(new GamePage(userTextLabel.Text));
+        finally
+        {
+            button.IsEnabled = true; 
+        }
     }
 
-    public void OnPauseButtonClicked(object sender, EventArgs e)
+    private async void OnPauseButtonClicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new MenuPage());
+        ImageButton button = (ImageButton)sender;
+        button.IsEnabled = false; 
+        try
+        {
+            await button.ScaleTo(1.2, 100, Easing.Linear);
+            await button.ScaleTo(1, 100, Easing.Linear);
+
+            await Navigation.PushAsync(new MenuPage());
+        }
+        finally
+        {
+            button.IsEnabled = true;
+        }
     }
+       
 
     public async static void ShowError(string message)
     {

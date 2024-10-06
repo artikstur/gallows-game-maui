@@ -2,17 +2,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="GallowsGame.Pages.GameRulesPage"
              Title="GameRulesPage"
-             BackgroundImageSource = "rule_bg.png">
+             BackgroundImageSource = "new_training.png">
 
 
     <Grid>
-
         <ImageButton x:Name="PauseButton"
                      Source="back_bttn.png"
                      HorizontalOptions="End"
                      VerticalOptions="Start"
-                     WidthRequest="100"
-                     HeightRequest="80"
+                     WidthRequest="110"
+                     HeightRequest="100"
                      Clicked="OnBackToMainPageBttnClicked"
                      Margin="0,5,15,0" />
         <Label Text="назад"
@@ -20,7 +19,7 @@
                    Margin="0,84,23,0"
                    FontFamily="Maki-Sans"
                    HorizontalOptions="End"
-                  VerticalOptions="Start"
+                   VerticalOptions="Start"
                    TextColor="Navy" />
 
     </Grid>

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net8.0-android;net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
+		<TargetFrameworks>net8.0;net8.0-android;net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
 		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
 		<!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
@@ -13,7 +13,7 @@
 		either BOTH runtimes must be indicated or ONLY macatalyst-x64. -->
 		<!-- For example: <RuntimeIdentifiers>maccatalyst-x64;maccatalyst-arm64</RuntimeIdentifiers> -->
 
-		<OutputType>Exe</OutputType>
+		<OutputType Condition="'$(TargetFramework)' != 'net8.0'">Exe</OutputType>
 		<RootNamespace>GallowsGame</RootNamespace>
 		<UseMaui>true</UseMaui>
 		<SingleProject>true</SingleProject>
@@ -29,7 +29,7 @@
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
 		<ApplicationVersion>1</ApplicationVersion>
-
+			
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">13.1</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
@@ -63,22 +63,63 @@
 	  <None Remove="Resources\Images\firstbttn.png" />
 	  <None Remove="Resources\Images\firstPageBg.png" />
 	  <None Remove="Resources\Images\gallow_concept.png" />
+	  <None Remove="Resources\Images\game_summary_bg.png" />
+	  <None Remove="Resources\Images\hint_letter.png" />
+	  <None Remove="Resources\Images\lenin.png" />
+	  <None Remove="Resources\Images\lenin_icon.png" />
+	  <None Remove="Resources\Images\lose_summary_background.png" />
+	  <None Remove="Resources\Images\new_training.png" />
 	  <None Remove="Resources\Images\ok_bttn.png" />
+	  <None Remove="Resources\Images\pausebttn.png" />
 	  <None Remove="Resources\Images\round.png" />
-	  <None Remove="Resources\Images\rule_bg.png" />
 	  <None Remove="Resources\Images\secondbttn.png" />
+	  <None Remove="Resources\Images\side_peek_bg.png" />
+	  <None Remove="Resources\Images\stalin.png" />
+	  <None Remove="Resources\Images\stalin_icon.png" />
 	  <None Remove="Resources\Images\stick.png" />
+	  <None Remove="Resources\Images\stick2.png" />
 	  <None Remove="Resources\Images\thirdbttn.png" />
+	  <None Remove="Resources\Images\win_summary_background.png" />
+	  <None Remove="Resources\raw\CorrectLetter.wav" />
+	  <None Remove="Resources\raw\final.wav" />
+	  <None Remove="Resources\raw\first.wav" />
+	  <None Remove="Resources\raw\fonGame.wav" />
+	  <None Remove="Resources\raw\Loss.wav" />
+	  <None Remove="Resources\raw\second.wav" />
+	  <None Remove="Resources\raw\WrongLetter.wav" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="DotNetEnv" Version="3.0.0" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
+		<PackageReference Include="Plugin.Maui.Audio" Version="3.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="ModalWindows\WinGameWindow.xaml.cs">
+	    <DependentUpon>WinGameWindow.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="ModalWindows\WinRoundWindow.xaml.cs">
+	    <DependentUpon>WinRoundWindow.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
 	  <MauiXaml Update="ModalWindows\CustomErrorDialog.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="ModalWindows\LoseRoundWindow.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="ModalWindows\WarningWindow.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="ModalWindows\WinGameWindow.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="ModalWindows\WinRoundWindow.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\EnterWordPage.xaml">
@@ -91,6 +132,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\MenuPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\SidePeekPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

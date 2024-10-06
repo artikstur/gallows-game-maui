@@ -1,0 +1,36 @@
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="GallowsGame.LoseRoundWindow"
+             BackgroundColor="Transparent">
+
+    <ContentPage.Content>
+        <Grid>
+            <Image Source="lose_summary_background.png" 
+                   HorizontalOptions="FillAndExpand" 
+                   VerticalOptions="FillAndExpand" 
+                   Aspect="AspectFill"/>
+			<Label
+					Margin="0,55,20,0"
+					x:Name="infoText"
+					FontSize="42"
+					FontFamily="Maki-Sans"
+					WidthRequest="450"
+					 HorizontalOptions="Center"
+					 VerticalOptions="Center"
+					 HorizontalTextAlignment="Center"
+             />
+            <Button
+                    Text="OK"
+                    Background="Transparent"
+                WidthRequest="300"
+                HeightRequest="100"
+                    TextColor="Red"
+                    FontSize ="60"
+                    FontFamily="Maki-Sans"
+                    Margin="0,500,30,0"
+                    Clicked="OnOkButtonClicked"
+                    />
+
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

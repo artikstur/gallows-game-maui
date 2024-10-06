@@ -1,6 +1,6 @@
 using GallowsGame.Utils;
 using Microsoft.Maui.Layouts;
-using System;
+using Plugin.Maui.Audio;
 using System.Runtime.CompilerServices;
 using System.Text;
 
@@ -8,21 +8,75 @@ namespace GallowsGame.Pages;
 
 public partial class GamePage : ContentPage
 {
-    private int coinCount = 3;
     private string hiddenWord;
     private string currentOpenedWord; //отгаданное на данный момент слово
-    private int currentIndex;
     private Label currentWord;
+    private Label balanceLabel;
+    private List<Image> gallowsImages;
+    private int attempts;
+    private int currentAttempts;
+    private int currentIndex = 0;
+    private string folderPath;
+    private Utils.UserData.PersonData currentPlayer;
+    private int _firstPlayerScores;
+    private int _secondPlayerScores;
+    private string _firstPlayerName;
+    private string _secondPlayerName;
+    private Utils.CustomKeyboard keyboard;
     public GamePage(string userText)
     {
         this.currentOpenedWord = new string('_', userText.Length);
         this.hiddenWord = userText;
 
         InitializeComponent();
+
+        SetPlayersData();
+        ChooseCurrentPlayer();
+
+        PlayRoundEffect();
         CreateLayout();
     }
 
-    public FlexLayout CreateTopBarLayout()
+    private void SetPlayersData()
+    {
+        _firstPlayerScores = UserDataStorage.FirstPlayer.WinRoundCount;
+        _secondPlayerScores = UserDataStorage.SecondPlayer.WinRoundCount;
+        _firstPlayerName = UserDataStorage.FirstPlayer.Name;
+        _secondPlayerName = UserDataStorage.SecondPlayer.Name;
+    }
+
+    private void PlayRoundEffect()
+    {
+        int currentRound = UserDataStorage.AllRoundsCount;
+
+        switch (currentRound)
+        {
+            case 1:
+                PlaySound("first.wav");
+                break;
+            case 2:
+                PlaySound("second.wav");
+                break;
+            case 3:
+                PlaySound("final.wav");
+                break;
+        }
+
+    }
+    private void ChooseCurrentPlayer()
+    {
+        int currentRound = UserDataStorage.AllRoundsCount;
+        if (currentRound % 2 != 0)
+        {
+            currentPlayer = UserDataStorage.SecondPlayer;
+        }
+        else
+        {
+            currentPlayer = UserDataStorage.FirstPlayer;
+        }
+    }
+
+    private FlexLayout CreateTopBarLayout()
     {
         var coinImage = new Image()
         {
@@ -32,11 +86,12 @@ public partial class GamePage : ContentPage
             WidthRequest = 50,
         };
 
-        var balanceLabel = new Label()
+        balanceLabel = new Label()
         {
             FontFamily = "Maki-Sans",
-            Text = coinCount.ToString(),
+            Text = currentPlayer.Balance.ToString(),
             FontSize = 50,
+            TextColor = Colors.Black
         };
 
         var coinBox = new FlexLayout()
@@ -44,13 +99,75 @@ public partial class GamePage : ContentPage
             Children = { coinImage, balanceLabel },
         };
 
-        var currentWordClue = new Label()
+        //var firstPlayerColor = currentPlayer.Name == _firstPlayerName ? Colors.Red : Colors.Navy;
+        //var secondPlayerColor = currentPlayer.Name == _secondPlayerName ? Colors.Red : Colors.Navy;
+
+        var firstPlayerTextDecorations = currentPlayer.Name == _firstPlayerName ? TextDecorations.Underline : TextDecorations.None;
+        var secondPlayerTextDecorations = currentPlayer.Name == _secondPlayerName ? TextDecorations.Underline : TextDecorations.None;
+
+        var firstPlayerNameLabel = new Label()
         {
-            FontFamily = "Maki-Sans", 
+            FontFamily = "Maki-Sans",
+            Margin = new Thickness(0, 11, 5, 0),
+            HorizontalOptions = LayoutOptions.Center,
+            Text = $"{_firstPlayerName}",
+            FontSize = 35,
+            //TextColor = firstPlayerColor,
+            TextColor = Colors.Red,
+            WidthRequest = 290,
+            HorizontalTextAlignment = TextAlignment.End,
+            TextDecorations = firstPlayerTextDecorations,
+        };
+
+        var secondPlayerNameLabel = new Label()
+        {
+            FontFamily = "Maki-Sans",
+            Margin = new Thickness(5, 11, 0, 0),
+            HorizontalOptions = LayoutOptions.Center,
+            Text = $"{_secondPlayerName}",
+            FontSize = 35,
+            //TextColor = secondPlayerColor,
+            TextColor = Colors.Navy,
+            WidthRequest = 290,
+            HorizontalTextAlignment = TextAlignment.Start,
+            TextDecorations = secondPlayerTextDecorations,
+        };
+
+        var currentScoresLabel = new Label()
+        {
+            FontFamily = "Maki-Sans",
             Margin = new Thickness(0, 11, 0, 0),
             HorizontalOptions = LayoutOptions.Center,
-            Text = "СЛОВО:",
-            FontSize = 50,
+            Text = $"{_firstPlayerScores} : {_secondPlayerScores}",
+            FontSize = 35,
+            TextColor = Colors.Navy,
+        };
+        var firstPlayerIcon = new Image()
+        {
+            Source = "stalin_icon.png",
+            WidthRequest = 50,
+            HeightRequest = 50,
+            Margin = new Thickness(5, 0, 5, 0),
+        };
+
+        var secondPlayerIcon = new Image()
+        {
+            Source = "lenin_icon.png",
+            WidthRequest = 50,
+            HeightRequest = 50,
+            Margin = new Thickness(5, 0, 5, 0),
+        };
+
+        var scoresBox = new HorizontalStackLayout()
+        {
+            Children = { firstPlayerIcon, currentScoresLabel, secondPlayerIcon },
+        };
+
+        var currentScoresBox = new HorizontalStackLayout()
+        {
+            Children = { firstPlayerNameLabel, scoresBox, secondPlayerNameLabel },
+            HorizontalOptions = LayoutOptions.Center,
+            VerticalOptions = LayoutOptions.Start,
         };
 
         currentWord = new Label()
@@ -59,11 +176,15 @@ public partial class GamePage : ContentPage
             HorizontalOptions = LayoutOptions.Center,
             Text = currentOpenedWord,
             FontSize = 60,
+            TextColor = Colors.Red,
+            Margin = new Thickness(0, 10, 0, 0)
         };
 
         var leftBarCenterBox = new VerticalStackLayout()
         {
-            Children = { currentWordClue, currentWord }
+            Children = { currentScoresBox, currentWord},
+            HorizontalOptions = LayoutOptions.FillAndExpand,
+            VerticalOptions = LayoutOptions.Start,
         };
 
         var pauseBtn = new ImageButton()
@@ -78,65 +199,109 @@ public partial class GamePage : ContentPage
 
         pauseBtn.Clicked += OnPauseButtonClicked;
 
-        FlexLayout.SetBasis(coinBox, new FlexBasis(0.33f, true));
-        FlexLayout.SetBasis(leftBarCenterBox, new FlexBasis(0.33f, true));
-        FlexLayout.SetBasis(pauseBtn, new FlexBasis(0.33f, true));
+        FlexLayout.SetBasis(coinBox, new FlexBasis(0.10f, true));
+        FlexLayout.SetBasis(leftBarCenterBox, new FlexBasis(0.80f, true));
+        FlexLayout.SetBasis(pauseBtn, new FlexBasis(0.10f, true));
 
         var topBar = new FlexLayout()
         {
             Children = { coinBox, leftBarCenterBox, pauseBtn },
             JustifyContent = FlexJustify.SpaceBetween,
             Direction = FlexDirection.Row,
-            HeightRequest = 150,
+            HeightRequest = 200,
             HorizontalOptions = LayoutOptions.FillAndExpand,
         };
 
         return topBar;
     }
 
-    public Image CreateGallowsImageLayout()
+    private List<Image> CreateGallowsImagesLayout(string path)
     {
-        var gallowsImage = new Image()
-        {
-            Margin = 30,
-            Source = "gallow_concept.png",
-        };
+        List<ImageSource> imageSources = ImagesLoader.LoadFromFolder(path);
 
-        return gallowsImage;
+        List<Image> images = new List<Image>();
+
+        foreach (var imageSource in imageSources)
+        {
+            var image = new Image
+            {
+                Source = imageSource
+            };
+
+            images.Add(image);
+        }
+
+        for (int i = 0; i < images.Count; i++)
+        {
+            images[i].IsVisible = false;
+        }
+        return images;
+
     }
 
-    public FlexLayout CreateCenterLayout()
+    private void ChooseFolderPath()
     {
-        var gallowsImage = CreateGallowsImageLayout();
-        FlexLayout.SetBasis(gallowsImage, new FlexBasis(1f, true));
-
-        var leftCenterBox = new Grid()
+        if (hiddenWord.Length < 6)
         {
-            Children = { gallowsImage },
-        };
+            folderPath = PathMaker.GetFolderPath("10_attempts");
+        }
+        else if (hiddenWord.Length == 6)
+        {
+            folderPath = PathMaker.GetFolderPath("12_attempts");
+        }
+        else
+        {
+            folderPath = PathMaker.GetFolderPath("14_attempts");
+        }
+
+    }
+
+    private FlexLayout CreateCenterLayout()
+    {
+        ChooseFolderPath();
+
+        gallowsImages = CreateGallowsImagesLayout(folderPath);
+
+        foreach (var gallowsImage in gallowsImages)
+        {
+            FlexLayout.SetBasis(gallowsImage, new FlexBasis(1f, true));
+        }
+
+        var leftCenterBox = new Grid();
+
+        foreach (var gallowsImage in gallowsImages)
+        {
+            leftCenterBox.Children.Add(gallowsImage);
+        }
 
         var keyboardLayOut = CreateKeyBoardLayout(700);
-        FlexLayout.SetBasis(gallowsImage, new FlexBasis(1f, true));
 
-        var cluePriceLabel = new Label()
+        var cluePriceButton = new Button()
         {
             FontFamily = "Maki-Sans",
-            Text = "Подсказка - ",
-            FontSize = 50,
+            Text = "Подсказка - 1",
+            FontSize = 40,
+            TextColor = Colors.Black,
+            WidthRequest = 340,
+            HeightRequest = 80,
+            BackgroundColor = Colors.Transparent,
         };
+
+        cluePriceButton.Clicked += RevealHint;
 
         var coinImage = new Image()
         {
-            Margin = new Thickness(5, 3, 0, 0),
+            Margin = new Thickness(5, 11, 0, 0),
             Source = "coin.png",
             HeightRequest = 40,
             WidthRequest = 40,
+            BackgroundColor = Colors.Transparent,
         };
 
         var clueBox = new FlexLayout()
         {
             Margin = new Thickness(0, 30, 0, 0),
-            Children = { cluePriceLabel, coinImage },
+            Children = { cluePriceButton, coinImage },
             HorizontalOptions = LayoutOptions.Center,
             AlignContent = FlexAlignContent.Start,
         };
@@ -161,7 +326,7 @@ public partial class GamePage : ContentPage
 
         return centerBox;
     }
-    public void CreateLayout()
+    private void CreateLayout()
     {
         var topBar = CreateTopBarLayout();
         var centerBox = CreateCenterLayout();
@@ -188,14 +353,26 @@ public partial class GamePage : ContentPage
             }
         };
     }
-    public void OnPauseButtonClicked(object sender, EventArgs e)
+    private async void OnPauseButtonClicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new MenuPage());
+        ImageButton button = (ImageButton)sender;
+        button.IsEnabled = false;
+        try
+        {
+            await button.ScaleTo(1.2, 100, Easing.Linear);
+            await button.ScaleTo(1, 100, Easing.Linear);
+
+            await Navigation.PushAsync(new MenuPage());
+        }
+        finally
+        {
+            button.IsEnabled = true;
+        }
     }
 
     private StackLayout CreateKeyBoardLayout(int boxSize)
     {
-        var keyboard = KeyboardBuilder.CreateKeyboard(this, OnKeyboardButtonClicked, OnClearButtonClicked, false);
+        keyboard = KeyboardBuilder.CreateKeyboard(this, OnKeyboardButtonClicked, OnClearButtonClicked, false);
 
         var keyboardLayout = new FlexLayout()
         {
@@ -220,38 +397,239 @@ public partial class GamePage : ContentPage
 
         return keyboardBox;
     }
-    
 
-    public void OnKeyboardButtonClicked(object sender, EventArgs e)
+
+    private async void OnKeyboardButtonClicked(object sender, EventArgs e)
     {
         Button button = (Button)sender;
+
+        button.IsEnabled = false;
+        button.Background = Colors.Transparent;
+        button.TextColor = Colors.Black;
+
+        await button.ScaleTo(1.2, 100, Easing.Linear);
+        await button.ScaleTo(1, 100, Easing.Linear);
+
         Grid parentGrid = (Grid)button.Parent;
         Image image = parentGrid.Children.OfType<Image>().FirstOrDefault();
 
-        button.IsEnabled = false;
-        button.IsEnabled = false;
-        button.Background = Colors.Transparent;
-        button.TextColor = button.TextColor; 
+        await GuessLetter(button.Text, image);
+    }
 
-        if (hiddenWord.Contains(button.Text))
+    private void CountAttempts()
+    {
+        if (hiddenWord.Length < 6)
         {
-            image.Source = "right_letter.png";
-
-            StringBuilder sb = new StringBuilder(currentOpenedWord);
-            sb[currentIndex] = button.Text[0];
-            currentOpenedWord = sb.ToString();
-            currentWord.Text = currentOpenedWord;
-
-            currentIndex++;
+            attempts = 10;
+        }
+        else if (hiddenWord.Length == 6)
+        {
+            attempts = 12;
         }
         else
         {
-            image.Source = "wrong_letter.png";
+            attempts = 14;
         }
     }
 
-    public void OnClearButtonClicked(object sender, EventArgs e)
+    private void DetermineOutcomeOfRound()
+    {
+        if (hiddenWord == currentOpenedWord)
+        {  
+            CheckForEnd(true);
+        }
+        else if (currentAttempts >= attempts)
+        {
+            CheckForEnd(false);
+        }
+    }
+    private void SetDefaultValues()
+    {
+        UserDataStorage.FirstPlayer.WinRoundCount = 0;
+        UserDataStorage.SecondPlayer.WinRoundCount = 0;
+        UserDataStorage.AllRoundsCount = 1;
+    }
+
+    private async void CheckForEnd(bool isWin)
+    {
+        AddWinnerPoint(UserDataStorage.AllRoundsCount, isWin);
+        UserDataStorage.AllRoundsCount += 1;
+
+        if (UserDataStorage.FirstPlayer.WinRoundCount == 2 || UserDataStorage.SecondPlayer.WinRoundCount == 2)
+        {
+            int firstPlayerWinCount = UserDataStorage.FirstPlayer.WinRoundCount; // сколько выйграл первый
+            int secondPlayerWinCount = UserDataStorage.SecondPlayer.WinRoundCount; //сколько выйграл второй
+
+            //имя победителя
+            string winner;
+            if (firstPlayerWinCount == 2)
+            {
+                winner = UserDataStorage.FirstPlayer.Name;
+            }
+            else
+            {
+                winner = UserDataStorage.SecondPlayer.Name;
+            }
+
+            // вызов окна результатов тут должен быть
+
+            await ShowResult(new WinGameWindow(winner, firstPlayerWinCount, secondPlayerWinCount));
+
+            // обнуляем
+            SetDefaultValues();
+        }
+        else
+        {
+            if (isWin)
+            {
+                await ShowResult(new WinRoundWindow(currentPlayer.Name));
+            }
+            else
+            {
+                await ShowResult(new LoseRoundWindow(currentPlayer.Name));
+            }
+        }
+    }
+
+
+    private void AddWinnerPoint(int playerNumber, bool isWin)
+    {
+        if (isWin)
+        {
+            if (playerNumber % 2 != 0)
+            {
+                UserDataStorage.SecondPlayer.WinRoundCount += 1;
+            }
+            else
+            {
+                UserDataStorage.FirstPlayer.WinRoundCount += 1;
+            }
+        }
+        else
+        {
+            if (playerNumber % 2 != 0)
+            {
+                UserDataStorage.FirstPlayer.WinRoundCount += 1;
+            }
+            else
+            {
+                UserDataStorage.SecondPlayer.WinRoundCount += 1;
+            }
+        }
+    }
+
+    IAudioPlayer player;
+    private async void PlaySound(string fileName)
+    {
+        var audioManager = AudioManager.Current;
+        player = audioManager.CreatePlayer(await FileSystem.OpenAppPackageFileAsync(fileName)); 
+        player.Play();
+    }
+
+    private async Task GuessLetter(string buttonText, Image image)
+    {
+        CountAttempts();
+
+        if (hiddenWord.Contains(buttonText))
+        {
+            PlaySound("CorrectLetter.wav");
+
+            image.Source = "right_letter.png";
+
+            StringBuilder sb = new StringBuilder(currentOpenedWord);
+            int index = -1;
+
+            while ((index = hiddenWord.IndexOf(buttonText, index + 1)) != -1)
+            {
+                sb[index] = buttonText[0];
+            }
+            currentOpenedWord = sb.ToString();
+            currentWord.Text = currentOpenedWord;
+
+            if (currentIndex != 0)
+            {
+                currentIndex--;
+                currentAttempts--;
+            }
+
+            gallowsImages[currentIndex].IsVisible = false;
+
+        }
+        else
+        {
+            PlaySound("WrongLetter.wav");
+
+            currentAttempts +=2;
+            image.Source = "wrong_letter.png";
+            gallowsImages[currentIndex].IsVisible = true;
+            currentIndex++;
+            if (currentIndex != attempts)
+            {
+                await Task.Delay(400);
+                gallowsImages[currentIndex].IsVisible = true;
+                currentIndex++;
+            }
+        }
+        DetermineOutcomeOfRound();
+    }
+
+    private async void RevealHint(object sender, EventArgs e)
+    {
+        
+        if (currentPlayer.Balance > 0)
+        {
+            currentPlayer.Balance--;
+            balanceLabel.Text = currentPlayer.Balance.ToString();
+            CountAttempts();
+
+            List<int> hiddenIndices = new List<int>();
+            for (int i = 0; i < currentOpenedWord.Length; i++)
+            {
+                if (currentOpenedWord[i] == '_')
+                {
+                    hiddenIndices.Add(i);
+                }
+            }
+
+            int randomIndex = new Random().Next(0, hiddenIndices.Count);
+            int selectedIndex = hiddenIndices[randomIndex];
+
+            if (selectedIndex != -1)
+            {
+                char letterToOpen = hiddenWord[selectedIndex];
+
+                keyboard.ChangeButtonImage(letterToOpen);
+
+                StringBuilder sb = new StringBuilder(currentOpenedWord);
+
+                for (int i = 0; i < hiddenWord.Length; i++)
+                {
+                    if (hiddenWord[i] == letterToOpen)
+                    {
+                        sb[i] = letterToOpen;
+                    }
+                }
+                currentOpenedWord = sb.ToString();
+                currentWord.Text = currentOpenedWord;
+            }
+
+            DetermineOutcomeOfRound();
+        }
+        else
+        {
+            await Navigation.PushModalAsync(new CustomErrorDialog("У вас на балансе не хватает монет!"));
+        }
+
+       
+    }
+
+    private async Task ShowResult(Page window)
+    {
+        await Application.Current.MainPage.Navigation.PushModalAsync(window);
+    }
+
+    private void OnClearButtonClicked(object sender, EventArgs e)
     {
         Button button = (Button)sender;
     }
-}
+} 
